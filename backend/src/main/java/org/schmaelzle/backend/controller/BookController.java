@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.schmaelzle.backend.model.Book;
 import org.schmaelzle.backend.service.BookService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,5 +21,10 @@ public class BookController {
     @GetMapping
     public List<Book> getAllBooks() {
         return service.getAllBooks();
+    }
+
+    @GetMapping("/{id}")
+    public Book getBookById(@PathVariable String id){
+        return service.getBookById(id);
     }
 }

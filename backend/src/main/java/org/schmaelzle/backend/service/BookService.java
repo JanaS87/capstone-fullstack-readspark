@@ -7,6 +7,7 @@ import org.schmaelzle.backend.repository.BookRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 
 @Service
@@ -20,4 +21,7 @@ public class BookService {
     }
 
 
+    public Book getBookById(String id) {
+        return repo.findById(id).orElseThrow(() -> new NoSuchElementException("Element with Id: " + id +" not found"));
+    }
 }
