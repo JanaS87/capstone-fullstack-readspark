@@ -1,4 +1,4 @@
-package org.schmaelzle.backend.model;
+package org.schmaelzle.backend.dto;
 
 public record ListDto(
         String name

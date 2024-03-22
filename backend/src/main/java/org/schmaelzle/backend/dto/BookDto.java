@@ -1,4 +1,6 @@
-package org.schmaelzle.backend.model;
+package org.schmaelzle.backend.dto;
+
+import org.schmaelzle.backend.model.List;
 
 public record BookDto(
         String title,
