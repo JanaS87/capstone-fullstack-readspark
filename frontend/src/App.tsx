@@ -3,6 +3,8 @@ import Layout from "./components/layout/Layout.tsx";
 import {Book} from "./types/Book.ts";
 import BookOverview from "./components/BookOverview/BookOverview.tsx";
 import axios from "axios";
+import {Route, BrowserRouter as Router, Routes} from "react-router-dom";
+import BookDetailPage from "./components/BookDetailPage/BookDetailPage.tsx";
 
 export default function App() {
     const [books, setBooks] = useState<Book[]>([])
@@ -21,10 +23,13 @@ export default function App() {
            });
     }
   return (
-      <>
-      <h1>Übersicht</h1>
-          <BookOverview books={books} fetchBooks={fetchBooks}/>
+          <Router>
+          <Routes>
+                <Route path={"/"} element={<BookOverview books={books} fetchBooks={fetchBooks}/>}/>
+                <Route path={"/books/:id"} element={<BookDetailPage />}/>
+          </Routes>
+
       <Layout />
-      </>
+          </Router>
   )
 }
