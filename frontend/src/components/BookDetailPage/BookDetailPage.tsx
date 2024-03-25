@@ -24,8 +24,9 @@ export default function BookDetailPage() {
             axios.get(`https://www.googleapis.com/books/v1/volumes?q=isbn:${book.isbn}`)
                 .then(response => {
                    const data = response.data;
-                   if (data.items && data.items[0].volumeInfo.imageLinks && data.items[0].volumeInfo.imageLinks.thumbnail) {
-                       setBookImage(data.items[0].volumeInfo.imageLinks.thumbnail);
+                   const thumbnail = data.items?.[0]?.volumeInfo?.imageLinks?.thumbnail;
+                   if (thumbnail) {
+                       setBookImage(thumbnail);
                    }
                 })
                 .catch(error => {
