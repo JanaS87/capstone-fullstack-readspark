@@ -5,10 +5,11 @@ type BookOverviewProps = {
     books: Book[],
     fetchBooks: () => void
 }
-
 export default function BookOverview(props: Readonly<BookOverviewProps>) {
+
     return (
         <div className={"book-container"} >
+            <h1>Übersicht</h1>
             <div className={"book-card"}>
                 {props.books.map(book =>
                     <BookCard key={book.id}  book={book}/>)}

@@ -22,7 +22,6 @@ export default function App() {
     }
   return (
       <>
-      <h1>Übersicht</h1>
           <BookOverview books={books} fetchBooks={fetchBooks}/>
       <Layout />
       </>
