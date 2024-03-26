@@ -4,8 +4,8 @@ public record BookDto(
         String title,
         String author,
         String genre,
-        String isbn,
         String publisher,
+        String isbn,
         boolean favorite,
         boolean read,
         String blurb
