@@ -3,6 +3,7 @@ package org.schmaelzle.backend.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.schmaelzle.backend.model.Book;
+import org.schmaelzle.backend.model.BookDto;
 import org.schmaelzle.backend.service.BookService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +26,11 @@ public class BookController {
     @GetMapping("/{id}")
     public Book getBookById(@PathVariable String id){
         return service.getBookById(id);
+    }
+
+    @PostMapping
+    public Book addBook(@RequestBody BookDto book) {
+        return service.addBook(book);
     }
 
 
