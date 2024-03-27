@@ -1,65 +1,86 @@
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import TextField from '@material-ui/core/TextField';
 import axios from 'axios';
-import { useState} from "react";
+import {ChangeEvent, useEffect, useState} from "react";
+import {Autocomplete, CircularProgress, TextField} from "@mui/material";
+
 
 export default function NewBookSearchbar() {
     const [books, setBooks] = useState([])
     const [selectedBook, setSelectedBook] = useState(null)
     const [read, setRead] = useState(false)
     const [favorite, setFavorite] = useState(false)
+    const [searchTerm, setSearchTerm] = useState("")
+    const [open, setOpen] = useState(false)
+    const loading = open && books.length === 0;
+
+    useEffect(() => {
+        let active = true;
+        if(!loading) {
+            return undefined;
+        }
+        fetchBooks().then((r) => {
+            if(active) {
+                setBooks(r)
+            }
+
+        });
+        return () => {
+            active = false;
+        }
+    }, [loading]);
+
+    useEffect(() => {
+        if(!open) {
+            setBooks([]);
+        }
+    }, [open]);
 
 
 
-    function fetchBooks(searchTerm: string) {
+  async  function fetchBooks(){
         if(searchTerm) {
-            axios.get(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(searchTerm)}&key=${process.env.REACT_APP_GOOGLE_BOOKS_API_KEY}`)
+          return  axios.get(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(searchTerm)}&key=${import.meta.env.VITE_REACT_APP_GOOGLE_BOOKS_API_KEY}`)
                 .then(response => {
-                    setBooks(response.data.items);
+                    console.log(response)
+                    return response.data.items;
                 })
                 .catch(error => {
                     console.error('Error fetching Books: ', error);
                 });
+            console.log(books)
         }
     }
 
     return (
-        <>
-            <Autocomplete
+           <Autocomplete
+               open={open}
+                onOpen={() => {
+                     setOpen(true);
+                }}
+                onClose={() => {
+                    setOpen(false);
+                }}
+                isOptionEqualToValue={(option, value) => option.volumeInfo.title === value.title}
+               getOptionLabel={(option) => option.volumeInfo.title}
                 options={books}
-                getOptionLabel={(option) => option.volumeInfo.title}
-                renderOption={(option) => (
-                    <>
-                        <img src={option.volumeInfo.imageLinks?.thumbnail} alt={option.volumeInfo.title}/>
-                        {option.volumeInfo.title}
-                    </>
+                loading={loading}
+                renderInput={(params) => (
+                    <TextField
+                        {...params}
+                        label="Search for a book"
+                        InputProps={{
+                            ...params.InputProps,
+                            endAdornment: (
+                                <>
+                                    {loading ? <CircularProgress color={"inherit"} size={20}/> : null}
+                                    {params.InputProps.endAdornment}
+                                </>
+                            )
+                        }}
+
+                    />
                 )}
-                style={{ width: 300 }}
-                onInputChange={(event, value) => fetchBooks(value)}
-                onChange={(event, value) => setSelectedBook(value)}
-                renderInput={(params) => <TextField {...params} label="Search for a book" variant="outlined" />}
-                {selectedBook && (
-                    <div>
-                        <h2>{selectedBook.volumeInfo.title}</h2>
 
+           />
 
-                    </div>
-                )}
-
-
-
-
-
-
-
-
-
-
-            ></Autocomplete>
-        </>
     )
-}
-
-function encodeURIComponent(searchTerm: string) {
-    throw new Error('Function not implemented.');
 }
