@@ -45,44 +45,4 @@ class GoogleBookServiceTest {
         assert response != null;
         assertEquals("Harry Potter und der Stein der Weisen", response.items().getFirst().volumeInfo().title());
     }
-
-
-
-
-
-
-
-
-
-   /* void searchBooks_whenCalledWithQuery_thenReturnsExpectedResponse() {
-        RestClient mockRestClient = Mockito.mock(RestClient.class);
-
-        when(mockRestClient.get()
-                .uri(any())
-                .retrieve()
-                .toEntity(GoogleBookResponse.class)
-                .getBody())
-                .thenReturn(new GoogleBookResponse());
-
-        GoogleBookService googleBookService = new GoogleBookService(mockRestClient);
-
-        GoogleBookResponse response = googleBookService.searchBooks("Harry Potter und der Stein der Weisen");
-
-        assertEquals("Harry Potter und der Stein der Weisen", response.items().getFirst().volumeInfo().title());
-    }*/
-    /*void searchBooks_whenCalledWithQuery_thenReturnsExpectedResponse() {
-        String query = "Harry Potter und der Stein der Weisen";
-        String expectedResponse = "{\"items\": [{\"volumeInfo\": {\"title\": \"Harry Potter und der Stein der Weisen\"}}]}";
-
-        mockWebServer.enqueue(new MockResponse()
-                .setBody(expectedResponse)
-                .addHeader("Content-Type", "application/json"));
-
-        GoogleBookService googleBookService = new GoogleBookService(new RestTemplate(), mockWebServer.url("/").toString());
-
-        GoogleBookResponse response = googleBookService.searchBooks(query);
-
-        assert response != null;
-        assertEquals("Harry Potter und der Stein der Weisen", response.items().getFirst().volumeInfo().title());
-    }*/
 }
