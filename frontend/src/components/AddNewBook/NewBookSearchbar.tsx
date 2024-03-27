@@ -1,25 +1,32 @@
 import axios from 'axios';
 import {ChangeEvent, useEffect, useState} from "react";
-import {Autocomplete, CircularProgress, TextField} from "@mui/material";
+import {Autocomplete, CircularProgress, TextField, Typography} from "@mui/material";
 
+interface VolumeInfo {
+    title: string,
+    authors: string[],
+}
+
+interface GoogleBook {
+    volumeInfo: VolumeInfo
+}
 
 export default function NewBookSearchbar() {
-    const [books, setBooks] = useState([])
-    const [selectedBook, setSelectedBook] = useState(null)
-    const [read, setRead] = useState(false)
-    const [favorite, setFavorite] = useState(false)
+    const [selectedBook, setSelectedBook] = useState<GoogleBook | null>(null)
     const [searchTerm, setSearchTerm] = useState("")
     const [open, setOpen] = useState(false)
-    const loading = open && books.length === 0;
+    const [options, setOptions] = useState<GoogleBook[]>([]);
+    const loading = open && options.length === 0;
 
     useEffect(() => {
         let active = true;
+
         if(!loading) {
             return undefined;
         }
         fetchBooks().then((r) => {
             if(active) {
-                setBooks(r)
+                setOptions(r)
             }
 
         });
@@ -30,27 +37,26 @@ export default function NewBookSearchbar() {
 
     useEffect(() => {
         if(!open) {
-            setBooks([]);
+            setOptions([]);
         }
     }, [open]);
-
 
 
   async  function fetchBooks(){
         if(searchTerm) {
           return  axios.get(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(searchTerm)}&key=${import.meta.env.VITE_REACT_APP_GOOGLE_BOOKS_API_KEY}`)
                 .then(response => {
-                    console.log(response)
-                    return response.data.items;
+                    return response.data.items || [];
                 })
                 .catch(error => {
                     console.error('Error fetching Books: ', error);
                 });
-            console.log(books)
         }
+        return [];
     }
 
     return (
+        <>
            <Autocomplete
                open={open}
                 onOpen={() => {
@@ -59,14 +65,21 @@ export default function NewBookSearchbar() {
                 onClose={() => {
                     setOpen(false);
                 }}
-                isOptionEqualToValue={(option, value) => option.volumeInfo.title === value.title}
+                isOptionEqualToValue={(option, value) => option?.volumeInfo.title === value?.volumeInfo.title}
                getOptionLabel={(option) => option.volumeInfo.title}
-                options={books}
+                options={options}
                 loading={loading}
+                onChange={(event, newValue) => {
+                    setSelectedBook(newValue)
+                }}
                 renderInput={(params) => (
                     <TextField
                         {...params}
                         label="Search for a book"
+                        value={searchTerm}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                            setSearchTerm(e.target.value)
+                        }}
                         InputProps={{
                             ...params.InputProps,
                             endAdornment: (
@@ -74,13 +87,22 @@ export default function NewBookSearchbar() {
                                     {loading ? <CircularProgress color={"inherit"} size={20}/> : null}
                                     {params.InputProps.endAdornment}
                                 </>
-                            )
+                            ),
                         }}
 
                     />
                 )}
 
            />
+            {selectedBook && (
+                <div>
+                    <Typography variant={"h6"}>Selected Book:</Typography>
+                    <Typography>Title: {selectedBook.volumeInfo.title}</Typography>
+                    <Typography>Authors: {selectedBook.volumeInfo.authors.join(", ")}</Typography>
+                </div>
+            )}
+        </>
+
 
     )
 }
