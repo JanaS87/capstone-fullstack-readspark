@@ -102,7 +102,5 @@ export default function NewBookSearchbar() {
                 </div>
             )}
         </>
-
-
     )
 }

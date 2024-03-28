@@ -1,5 +1,4 @@
 import {useEffect, useState} from "react";
-import Layout from "./components/layout/Layout.tsx";
 import {Book} from "./types/Book.ts";
 import BookOverview from "./components/BookOverview/BookOverview.tsx";
 import axios from "axios";
@@ -31,7 +30,7 @@ export default function App() {
                 <Route path={"/books/:id"} element={<BookDetailPage />}/>
           </Routes>
 
-      <Layout />
+
       </>
 
   )
