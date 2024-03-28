@@ -17,7 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
- class BookControllerTest {
+class BookControllerTest {
 
     @Autowired
     private MockMvc mvc;
@@ -37,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     @Test
     void getBookById_whenCalledWithValidId_thenReturnNoSuchElementException() throws Exception {
         //GIVEN
-        Book book = new Book("1", "Harry Potter", "J.K. Rowling", "Fantasy", "3-551-55167-7", "Carlson",false,
+        Book book = new Book("1", "Harry Potter", "J.K. Rowling", "Fantasy", "Carlson", "3-551-55167-7",false,
                 false, "Bis zu seinem elften Geburtstag glaubt Harry, er sei ein ganz normaler Junge. Doch dann erfährt er, dass er sich an der Schule für Hexerei und Zauberei einfinden soll – " +
                         "denn er ist ein Zauberer! In Hogwarts stürzt Harry von einem Abenteuer ins nächste und muss gegen Bestien, Mitschüler und Fabelwesen kämpfen. Da ist es gut, " +
                         "dass er schon Freunde gefunden hat, die ihm im Kampf gegen die dunklen Mächte zur Seite stehen.");
@@ -51,8 +51,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
                             "title": "Harry Potter",
                             "author": "J.K. Rowling",
                             "genre": "Fantasy",
-                            "isbn": "3-551-55167-7",
                             "publisher": "Carlson",
+                            "isbn": "3-551-55167-7",
                             "favorite": false,
                             "read": false,
                             "blurb": "Bis zu seinem elften Geburtstag glaubt Harry, er sei ein ganz normaler Junge. Doch dann erfährt er, dass er sich an der Schule für Hexerei und Zauberei einfinden soll – denn er ist ein Zauberer! In Hogwarts stürzt Harry von einem Abenteuer ins nächste und muss gegen Bestien, Mitschüler und Fabelwesen kämpfen. Da ist es gut, dass er schon Freunde gefunden hat, die ihm im Kampf gegen die dunklen Mächte zur Seite stehen."
@@ -67,5 +67,38 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         //WHEN&THEN
         mvc.perform(MockMvcRequestBuilders.get("/api/books/123"))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void addBook_whenCalledWithBook_thenReturnBook() throws Exception {
+        //GIVEN
+        //WHEN&THEN
+        mvc.perform(MockMvcRequestBuilders.post("/api/books")
+                        .contentType("application/json")
+                        .content("""
+                                {
+                                    "title": "Harry Potter",
+                                    "author": "J.K. Rowling",
+                                    "genre": "Fantasy",
+                                    "publisher": "Carlson",
+                                    "isbn": "3-551-55167-7",
+                                    "favorite": false,
+                                    "read": false,
+                                    "blurb": "Bis zu seinem elften Geburtstag glaubt Harry, er sei ein ganz normaler Junge. Doch dann erfährt er, dass er sich an der Schule für Hexerei und Zauberei einfinden soll – denn er ist ein Zauberer! In Hogwarts stürzt Harry von einem Abenteuer ins nächste und muss gegen Bestien, Mitschüler und Fabelwesen kämpfen. Da ist es gut, dass er schon Freunde gefunden hat, die ihm im Kampf gegen die dunklen Mächte zur Seite stehen."
+                                }
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(content().json("""
+                        {
+                            "title": "Harry Potter",
+                            "author": "J.K. Rowling",
+                            "genre": "Fantasy",
+                            "publisher": "Carlson",
+                            "isbn": "3-551-55167-7",
+                            "favorite": false,
+                            "read": false,
+                            "blurb": "Bis zu seinem elften Geburtstag glaubt Harry, er sei ein ganz normaler Junge. Doch dann erfährt er, dass er sich an der Schule für Hexerei und Zauberei einfinden soll – denn er ist ein Zauberer! In Hogwarts stürzt Harry von einem Abenteuer ins nächste und muss gegen Bestien, Mitschüler und Fabelwesen kämpfen. Da ist es gut, dass er schon Freunde gefunden hat, die ihm im Kampf gegen die dunklen Mächte zur Seite stehen."
+                        }
+                        """));
     }
 }

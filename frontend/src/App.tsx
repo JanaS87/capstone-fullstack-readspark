@@ -1,10 +1,11 @@
 import {useEffect, useState} from "react";
-import Layout from "./components/layout/Layout.tsx";
 import {Book} from "./types/Book.ts";
 import BookOverview from "./components/BookOverview/BookOverview.tsx";
 import axios from "axios";
-import {Route, BrowserRouter as Router, Routes} from "react-router-dom";
+import {Route, Routes} from "react-router-dom";
 import BookDetailPage from "./components/BookDetailPage/BookDetailPage.tsx";
+import Navbar from "./components/navbar/Navbar.tsx";
+import AddNewBookPage from "./components/AddNewBook/AddNewBookPage.tsx";
 
 export default function App() {
     const [books, setBooks] = useState<Book[]>([])
@@ -23,13 +24,14 @@ export default function App() {
            });
     }
   return (
-          <Router>
+      <>
           <Routes>
                 <Route path={"/"} element={<BookOverview books={books} fetchBooks={fetchBooks}/>}/>
                 <Route path={"/books/:id"} element={<BookDetailPage />}/>
+                <Route path={"/add"} element={<AddNewBookPage />}/>
           </Routes>
+          <Navbar fetchBooks={fetchBooks}/>
+      </>
 
-      <Layout />
-          </Router>
   )
 }

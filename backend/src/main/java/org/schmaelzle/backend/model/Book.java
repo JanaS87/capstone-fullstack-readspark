@@ -1,20 +1,25 @@
 package org.schmaelzle.backend.model;
 
-
-import lombok.With;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@With
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Document("books")
-public record Book(
-        String id,
-        String title,
-        String author,
-        String genre,
-        String isbn,
-        String publisher,
-        boolean favorite,
-        boolean read,
-        String blurb
-) {
+public class Book{
+private String id;
+private String title;
+private String author;
+private String genre;
+private String publisher;
+private String isbn;
+private boolean favorite;
+private boolean read;
+private String blurb;
 }
+
