@@ -1,6 +1,5 @@
 import {IndustryIdentifier} from "./IndustryIdentifier.ts";
 import {ImageLink} from "./ImageLink.ts";
-import {SearchInfo} from "./SearchInfo.ts";
 
 export type VolumeInfo = {
     title: string,
@@ -9,5 +8,5 @@ export type VolumeInfo = {
     industryIdentifiers: IndustryIdentifier[],
     categories: string[],
     imageLinks: ImageLink,
-    searchInfo: SearchInfo
+    description: string
 }

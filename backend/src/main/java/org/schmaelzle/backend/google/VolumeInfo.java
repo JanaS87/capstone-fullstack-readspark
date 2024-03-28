@@ -9,6 +9,6 @@ public record VolumeInfo(
         List<IndustryIdentifier> industryIdentifiers,
         List<String> categories,
         ImageLink imageLinks,
-        SearchInfo searchInfo
+        String description
 ) {
 }

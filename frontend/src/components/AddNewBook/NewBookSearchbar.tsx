@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, {ChangeEvent, useEffect, useState} from "react";
 import {Alert, Autocomplete, Button, CircularProgress, Snackbar, TextField, Typography} from "@mui/material";
-import {IndustryIdentifier} from "../../types/IndustryIdentifier.ts";
+import {GoogleBook} from "../../types/GoogleBook";
 
 interface BookDto {
     title: string,
@@ -14,29 +14,9 @@ interface BookDto {
     blurb: string,
 }
 
-interface VolumeInfo {
-    title: string,
-    authors: string[],
-    publisher: string,
-    categories: string[],
-    industryIdentifiers: IndustryIdentifier[],
-    description: string
-}
-
-interface ImageLink {
-    smallThumbnail: string,
-    Thumbnail: string
-}
-
-interface GoogleBook {
-    id: string,
-    volumeInfo: VolumeInfo,
-    imageLinks: ImageLink
-}
-
 async  function fetchBooks(searchTerm: string){
     if(searchTerm) {
-        return  axios.get(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(searchTerm)}&key=${import.meta.env.VITE_REACT_APP_GOOGLE_BOOKS_API_KEY}`)
+        return  axios.get(`/api/google/books?q=${searchTerm}`)
             .then(response => {
                 return response.data.items || [];
             })
@@ -54,22 +34,26 @@ export default function NewBookSearchbar() {
     const [options, setOptions] = useState<GoogleBook[]>([]);
     const [books, setBooks] = useState<GoogleBook[]>([]);
     const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [timer, setTimer] = useState<NodeJS.Timeout>();
+    const [isRead, setIsRead] = useState(false);
+    const [isFavorite, setIsFavorite] = useState(false);
     const loading = open && options.length === 0;
 
 
 
     useEffect(() => {
         let active = true;
+        clearTimeout(timer)
+       const timeout = setTimeout(() => {
+            fetchBooks(searchTerm).then((r) => {
+                if(active) {
+                    setOptions(r)
+                }
+            });
 
-        if(!loading) {
-            return undefined;
-        }
-        fetchBooks(searchTerm).then((r) => {
-            if(active) {
-                setOptions(r)
-            }
+        }, 1000);
 
-        });
+        setTimer(timeout);
         return () => {
             active = false;
         }
@@ -140,8 +124,8 @@ export default function NewBookSearchbar() {
                     setSelectedBook(newValue)
                 }}
                renderOption = {(props, option) => (
-                   <li key={option.id} {...props}>
-                       <img src={option.imageLinks?.smallThumbnail} alt={option.volumeInfo.title} style={{width: 50, height: 50}}/>
+                   <li {...props} key={option.volumeInfo.industryIdentifiers[0].identifier} >
+                       <img src={option.volumeInfo.imageLinks?.smallThumbnail} alt={option.volumeInfo.title} style={{width: 50, height: 50}}/>
                           {option.volumeInfo.title}
                      </li>
                )}
@@ -170,7 +154,7 @@ export default function NewBookSearchbar() {
             {selectedBook && (
                 <div>
                     <Typography variant={"h6"}>Selected Book:</Typography>
-                    <img src={selectedBook.imageLinks?.Thumbnail} alt={selectedBook.volumeInfo.title}/>
+                    <img src={selectedBook.volumeInfo.imageLinks?.thumbnail} alt={selectedBook.volumeInfo.title}/>
                     <Typography>Titel: {selectedBook.volumeInfo.title}</Typography>
                     <Typography>Author: {selectedBook.volumeInfo.authors.join(", ")}</Typography>
                     <Typography>Publisher: {selectedBook.volumeInfo.publisher}</Typography>
