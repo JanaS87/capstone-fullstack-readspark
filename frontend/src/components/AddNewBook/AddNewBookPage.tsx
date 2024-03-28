@@ -1,5 +1,4 @@
 import NewBookSearchbar from "./NewBookSearchbar.tsx";
-import Navbar from "../navbar/Navbar.tsx";
 
 
 export default function AddNewBookPage() {
@@ -9,7 +8,6 @@ export default function AddNewBookPage() {
             <h1>Neues Buch hinzufügen</h1>
         </div>
             <NewBookSearchbar />
-            <Navbar/>
         </>
     )
 }
