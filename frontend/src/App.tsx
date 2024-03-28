@@ -5,6 +5,7 @@ import axios from "axios";
 import {Route, Routes} from "react-router-dom";
 import BookDetailPage from "./components/BookDetailPage/BookDetailPage.tsx";
 import NewBookSearchbar from "./components/AddNewBook/NewBookSearchbar.tsx";
+import Navbar from "./components/navbar/Navbar.tsx";
 
 export default function App() {
     const [books, setBooks] = useState<Book[]>([])
@@ -29,8 +30,7 @@ export default function App() {
                 <Route path={"/"} element={<BookOverview books={books} fetchBooks={fetchBooks}/>}/>
                 <Route path={"/books/:id"} element={<BookDetailPage />}/>
           </Routes>
-
-
+          <Navbar/>
       </>
 
   )

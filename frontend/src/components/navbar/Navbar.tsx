@@ -1,9 +1,9 @@
 import * as React from 'react';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import RestoreIcon from '@mui/icons-material/Restore';
+import HomeIcon from '@mui/icons-material/Home';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
+import PlusIcon from '@mui/icons-material/Add';
 import './Navbar.css'
 
 export default function SimpleBottomNavigation() {
@@ -21,9 +21,9 @@ export default function SimpleBottomNavigation() {
                 }}
                 sx={{display: 'flex', justifyContent: 'center' ,width: 300, position: 'fixed', bottom: 0,  gap: 8}}
             >
-                <BottomNavigationAction label="Recents" icon={<RestoreIcon />}  />
-                <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />}  />
-                <BottomNavigationAction label="Nearby" icon={<LocationOnIcon />}  />
+                <BottomNavigationAction label="Übersicht" icon={<HomeIcon />}  />
+                <BottomNavigationAction label="Buch hinzufügen" icon={<PlusIcon />}  />
+                <BottomNavigationAction label="Favoriten" icon={<FavoriteIcon />}  />
             </BottomNavigation>
         </div>
     );
