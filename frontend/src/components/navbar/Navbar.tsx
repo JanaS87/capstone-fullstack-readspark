@@ -5,9 +5,29 @@ import HomeIcon from '@mui/icons-material/Home';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import PlusIcon from '@mui/icons-material/Add';
 import './Navbar.css'
+import {useNavigate} from "react-router-dom";
 
 export default function SimpleBottomNavigation() {
     const [value, setValue] = React.useState(0);
+    const navigate = useNavigate();
+
+    function handleChangeNavigation(event: React.SyntheticEvent<Element, Event>, newValue: number) {
+        setValue(newValue);
+
+        switch (newValue) {
+            case 0:
+                navigate('/');
+                break;
+            case 1:
+                navigate('/add');
+                break;
+            case 2:
+                navigate('/favorites');
+                break;
+            default:
+               break;
+        }
+    }
 
 
     return (
@@ -15,10 +35,7 @@ export default function SimpleBottomNavigation() {
             <BottomNavigation
                 showLabels
                 value={value}
-                onChange={(event: React.SyntheticEvent<Element, Event>, newValue) => {
-                    setValue(newValue);
-                    console.log(event.timeStamp)
-                }}
+                onChange={handleChangeNavigation}
                 sx={{display: 'flex', justifyContent: 'center' ,width: 300, position: 'fixed', bottom: 0,  gap: 8}}
             >
                 <BottomNavigationAction label="Übersicht" icon={<HomeIcon />}  />

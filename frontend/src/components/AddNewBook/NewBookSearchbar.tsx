@@ -7,8 +7,15 @@ interface VolumeInfo {
     authors: string[],
 }
 
+interface ImageLink {
+    smallThumbnail: string,
+    Thumbnail: string
+}
+
 interface GoogleBook {
-    volumeInfo: VolumeInfo
+    id: string,
+    volumeInfo: VolumeInfo,
+    imageLinks: ImageLink
 }
 
 export default function NewBookSearchbar() {
@@ -72,6 +79,12 @@ export default function NewBookSearchbar() {
                 onChange={(event, newValue) => {
                     setSelectedBook(newValue)
                 }}
+               renderOption = {(props, option) => (
+                   <li key={option.id} {...props}>
+                       <img src={option.imageLinks?.smallThumbnail} alt={option.volumeInfo.title} style={{width: 50, height: 50}}/>
+                          {option.volumeInfo.title}
+                     </li>
+               )}
                 renderInput={(params) => (
                     <TextField
                         {...params}
@@ -97,8 +110,9 @@ export default function NewBookSearchbar() {
             {selectedBook && (
                 <div>
                     <Typography variant={"h6"}>Selected Book:</Typography>
-                    <Typography>Title: {selectedBook.volumeInfo.title}</Typography>
-                    <Typography>Authors: {selectedBook.volumeInfo.authors.join(", ")}</Typography>
+                    <img src={selectedBook.imageLinks?.Thumbnail} alt={selectedBook.volumeInfo.title}/>
+                    <Typography>Titel: {selectedBook.volumeInfo.title}</Typography>
+                    <Typography>Author: {selectedBook.volumeInfo.authors.join(", ")}</Typography>
                 </div>
             )}
         </>

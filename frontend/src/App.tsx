@@ -4,8 +4,8 @@ import BookOverview from "./components/BookOverview/BookOverview.tsx";
 import axios from "axios";
 import {Route, Routes} from "react-router-dom";
 import BookDetailPage from "./components/BookDetailPage/BookDetailPage.tsx";
-import NewBookSearchbar from "./components/AddNewBook/NewBookSearchbar.tsx";
 import Navbar from "./components/navbar/Navbar.tsx";
+import AddNewBookPage from "./components/AddNewBookPage.tsx";
 
 export default function App() {
     const [books, setBooks] = useState<Book[]>([])
@@ -25,10 +25,10 @@ export default function App() {
     }
   return (
       <>
-          <NewBookSearchbar />
           <Routes>
                 <Route path={"/"} element={<BookOverview books={books} fetchBooks={fetchBooks}/>}/>
                 <Route path={"/books/:id"} element={<BookDetailPage />}/>
+              <Route path={"/add"} element={<AddNewBookPage />}/>
           </Routes>
           <Navbar/>
       </>
