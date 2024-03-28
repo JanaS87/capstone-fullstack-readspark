@@ -1,12 +1,25 @@
 import axios from 'axios';
 import React, {ChangeEvent, useEffect, useState} from "react";
 import {Alert, Autocomplete, Button, CircularProgress, Snackbar, TextField, Typography} from "@mui/material";
+import {IndustryIdentifier} from "../../types/IndustryIdentifier.ts";
+
+interface BookDto {
+    title: string,
+    author: string,
+    genre: string,
+    publisher: string,
+    isbn: string,
+    favorite: boolean,
+    read: boolean,
+    blurb: string,
+}
 
 interface VolumeInfo {
     title: string,
     authors: string[],
     publisher: string,
-    categories: string[]
+    categories: string[],
+    identifiers: IndustryIdentifier[]
 }
 
 interface ImageLink {
@@ -72,10 +85,25 @@ export default function NewBookSearchbar() {
         }
     }, [open]);
 
+    function convertToBookDto(googleBook: GoogleBook) : BookDto{
+        return {
+            title: googleBook.volumeInfo.title || "",
+            author: googleBook.volumeInfo.authors ? googleBook.volumeInfo.authors.join(", ") : "",
+            genre: googleBook.volumeInfo.categories ? googleBook.volumeInfo.categories.join(", ") : "",
+            publisher: googleBook.volumeInfo.publisher || "",
+            isbn: googleBook.volumeInfo.identifiers ? googleBook.volumeInfo.identifiers[0].identifier : "",
+            favorite: false,
+            read: false,
+            blurb: googleBook.searchInfo.textSnippet || ""
+        }
+    }
+
 
     function handleAddNewBook() {
         if (selectedBook) {
-            axios.post('/api/books', selectedBook)
+            const bookDto = convertToBookDto(selectedBook);
+            console.log("Book: ", bookDto)
+            axios.post('/api/books', bookDto)
                 .then(response => {
                     console.log('Book added: ', response.data);
                     setBooks(prevBooks => [...prevBooks, response.data]);
@@ -155,7 +183,10 @@ export default function NewBookSearchbar() {
                     <Button variant={"contained"} color={"primary"} onClick={handleAddNewBook}>Buch hinzufügen</Button>
                 </div>
             )}
-            <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+            <Snackbar open={openSnackbar}
+                      autoHideDuration={6000}
+                      onClose={handleCloseSnackbar}
+            anchorOrigin={{vertical: 'top', horizontal: 'right'}}>
                 <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%' }}>
                     Buch erfolgreich hinzugefügt!
                 </Alert>
