@@ -1,5 +1,5 @@
-import NewBookSearchbar from "./AddNewBook/NewBookSearchbar.tsx";
-import Navbar from "./navbar/Navbar.tsx";
+import NewBookSearchbar from "./NewBookSearchbar.tsx";
+import Navbar from "../navbar/Navbar.tsx";
 
 
 export default function AddNewBookPage() {

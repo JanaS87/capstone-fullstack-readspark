@@ -19,7 +19,7 @@ interface VolumeInfo {
     authors: string[],
     publisher: string,
     categories: string[],
-    identifiers: IndustryIdentifier[]
+    industryIdentifiers: IndustryIdentifier[]
 }
 
 interface ImageLink {
@@ -91,7 +91,7 @@ export default function NewBookSearchbar() {
             author: googleBook.volumeInfo.authors ? googleBook.volumeInfo.authors.join(", ") : "",
             genre: googleBook.volumeInfo.categories ? googleBook.volumeInfo.categories.join(", ") : "",
             publisher: googleBook.volumeInfo.publisher || "",
-            isbn: googleBook.volumeInfo.identifiers ? googleBook.volumeInfo.identifiers[0].identifier : "",
+            isbn: googleBook.volumeInfo.industryIdentifiers ? googleBook.volumeInfo.industryIdentifiers[0].identifier : "",
             favorite: false,
             read: false,
             blurb: googleBook.searchInfo.textSnippet || ""

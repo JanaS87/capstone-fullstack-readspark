@@ -7,6 +7,8 @@ import PlusIcon from '@mui/icons-material/Add';
 import './Navbar.css'
 import {useNavigate} from "react-router-dom";
 
+
+
 export default function SimpleBottomNavigation() {
     const [value, setValue] = React.useState(0);
     const navigate = useNavigate();
