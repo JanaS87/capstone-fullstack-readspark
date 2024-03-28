@@ -30,7 +30,7 @@ export default function App() {
                 <Route path={"/books/:id"} element={<BookDetailPage />}/>
                 <Route path={"/add"} element={<AddNewBookPage />}/>
           </Routes>
-          <Navbar/>
+          <Navbar fetchBooks={fetchBooks}/>
       </>
 
   )

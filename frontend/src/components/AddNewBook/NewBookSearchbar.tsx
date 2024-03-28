@@ -19,7 +19,8 @@ interface VolumeInfo {
     authors: string[],
     publisher: string,
     categories: string[],
-    industryIdentifiers: IndustryIdentifier[]
+    industryIdentifiers: IndustryIdentifier[],
+    description: string
 }
 
 interface ImageLink {
@@ -27,15 +28,10 @@ interface ImageLink {
     Thumbnail: string
 }
 
-interface SearchInfo {
-    textSnippet: string
-}
-
 interface GoogleBook {
     id: string,
     volumeInfo: VolumeInfo,
-    imageLinks: ImageLink,
-    searchInfo: SearchInfo
+    imageLinks: ImageLink
 }
 
 async  function fetchBooks(searchTerm: string){
@@ -94,7 +90,7 @@ export default function NewBookSearchbar() {
             isbn: googleBook.volumeInfo.industryIdentifiers ? googleBook.volumeInfo.industryIdentifiers[0].identifier : "",
             favorite: false,
             read: false,
-            blurb: googleBook.searchInfo.textSnippet || ""
+            blurb: googleBook.volumeInfo.description || ""
         }
     }
 
@@ -179,12 +175,12 @@ export default function NewBookSearchbar() {
                     <Typography>Author: {selectedBook.volumeInfo.authors.join(", ")}</Typography>
                     <Typography>Publisher: {selectedBook.volumeInfo.publisher}</Typography>
                     <Typography>Categories: {selectedBook.volumeInfo.categories.join(", ")}</Typography>
-                    <Typography>Search Info: {selectedBook.searchInfo.textSnippet}</Typography>
+                    <Typography>Search Info: {selectedBook.volumeInfo.description}</Typography>
                     <Button variant={"contained"} color={"primary"} onClick={handleAddNewBook}>Buch hinzufügen</Button>
                 </div>
             )}
             <Snackbar open={openSnackbar}
-                      autoHideDuration={6000}
+                      autoHideDuration={3000}
                       onClose={handleCloseSnackbar}
             anchorOrigin={{vertical: 'top', horizontal: 'right'}}>
                 <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%' }}>

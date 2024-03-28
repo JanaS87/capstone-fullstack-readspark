@@ -1,3 +1,3 @@
 export type SearchInfo = {
-    textSnippet: string
+    description: string
 }

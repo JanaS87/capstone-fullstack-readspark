@@ -6,7 +6,7 @@ export default function AddNewBookPage() {
     return (
         <>
         <div>
-            <h1>Add New Book</h1>
+            <h1>Neues Buch hinzufügen</h1>
         </div>
             <NewBookSearchbar />
             <Navbar/>

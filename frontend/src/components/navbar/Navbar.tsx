@@ -7,9 +7,11 @@ import PlusIcon from '@mui/icons-material/Add';
 import './Navbar.css'
 import {useNavigate} from "react-router-dom";
 
+type NavbarProps = {
+    fetchBooks: () => void
+}
 
-
-export default function SimpleBottomNavigation() {
+export default function Navbar({fetchBooks}: Readonly<NavbarProps>) {
     const [value, setValue] = React.useState(0);
     const navigate = useNavigate();
 
@@ -18,6 +20,7 @@ export default function SimpleBottomNavigation() {
 
         switch (newValue) {
             case 0:
+                fetchBooks();
                 navigate('/');
                 break;
             case 1:
