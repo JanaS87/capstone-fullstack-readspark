@@ -34,7 +34,7 @@ export default function NewBookSearchbar() {
     const [options, setOptions] = useState<GoogleBook[]>([]);
     const [books, setBooks] = useState<GoogleBook[]>([]);
     const [openSnackbar, setOpenSnackbar] = useState(false);
-    const [timer, setTimer] = useState<NodeJS.Timeout>();
+    const [timer, setTimer] = useState<number>();
     const [alert, setAlert] = useState<string>("");
     const loading = open && options.length === 0;
 
@@ -43,7 +43,7 @@ export default function NewBookSearchbar() {
     useEffect(() => {
         let active = true;
         clearTimeout(timer)
-       const timeout = setTimeout(() => {
+       const timeout = window.setTimeout(() => {
            fetchSearchedBooks(searchTerm).then((r) => {
                 if(active) {
                     setOptions(r)
