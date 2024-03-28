@@ -14,7 +14,7 @@ interface BookDto {
     blurb: string,
 }
 
-async  function fetchBooks(searchTerm: string){
+async  function fetchSearchedBooks(searchTerm: string){
     if(searchTerm) {
         return  axios.get(`/api/google/books?q=${searchTerm}`)
             .then(response => {
@@ -35,8 +35,6 @@ export default function NewBookSearchbar() {
     const [books, setBooks] = useState<GoogleBook[]>([]);
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [timer, setTimer] = useState<NodeJS.Timeout>();
-    const [isRead, setIsRead] = useState(false);
-    const [isFavorite, setIsFavorite] = useState(false);
     const loading = open && options.length === 0;
 
 
@@ -45,7 +43,7 @@ export default function NewBookSearchbar() {
         let active = true;
         clearTimeout(timer)
        const timeout = setTimeout(() => {
-            fetchBooks(searchTerm).then((r) => {
+           fetchSearchedBooks(searchTerm).then((r) => {
                 if(active) {
                     setOptions(r)
                 }
