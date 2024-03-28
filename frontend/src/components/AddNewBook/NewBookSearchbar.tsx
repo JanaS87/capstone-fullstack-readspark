@@ -35,6 +35,7 @@ export default function NewBookSearchbar() {
     const [books, setBooks] = useState<GoogleBook[]>([]);
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [timer, setTimer] = useState<NodeJS.Timeout>();
+    const [alert, setAlert] = useState<string>("");
     const loading = open && options.length === 0;
 
 
@@ -79,16 +80,18 @@ export default function NewBookSearchbar() {
 
     function handleAddNewBook() {
         if (selectedBook) {
+            const bookExists = books.find(book => book.volumeInfo.industryIdentifiers[0].identifier === selectedBook.volumeInfo.industryIdentifiers[0].identifier);
+            if (bookExists) {
+                setAlert('Buch bereits vorhanden!');
+                return;
+            }
             const bookDto = convertToBookDto(selectedBook);
-            console.log("Book: ", bookDto)
             axios.post('/api/books', bookDto)
                 .then(response => {
-                    console.log('Book added: ', response.data);
                     setBooks(prevBooks => [...prevBooks, response.data]);
                     setOpenSnackbar(true);
                     setSelectedBook(null);
                     setSearchTerm("");
-                    console.log("Book added: ", books);
                 })
                 .catch(error => {
                     console.error('Error adding book: ', error);
@@ -169,6 +172,11 @@ export default function NewBookSearchbar() {
                     Buch erfolgreich hinzugefügt!
                 </Alert>
             </Snackbar>
+            {alert && (
+                <Alert severity="warning" onClose={() => setAlert("")}>
+                    {alert}
+                </Alert>
+            )}
         </>
     )
 }
