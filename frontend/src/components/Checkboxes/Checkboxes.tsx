@@ -9,7 +9,7 @@ type CheckBoxProps = {
     label: string
 }
 
-export default function Checkboxes({checked, onChange, label}: CheckBoxProps) {
+export default function Checkboxes({checked, onChange, label}: Readonly<CheckBoxProps>) {
     return (
         <FormGroup>
             <FormControlLabel control={
