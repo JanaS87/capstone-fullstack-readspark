@@ -12,20 +12,11 @@ type CheckBoxProps = {
 export default function Checkboxes({checked, onChange, label}: CheckBoxProps) {
     return (
         <FormGroup>
-            <FormControlLabel required control={
+            <FormControlLabel control={
                 <Checkbox
                     checked={checked}
                     onChange={onChange}
-                    color={"primary"}
-                />
-            }
-                              label={label}
-            />
-            <FormControlLabel required control={
-                <Checkbox
-                    checked={checked}
-                    onChange={onChange}
-                    color={"primary"}
+                    color= "primary"
                 />
             }
                               label={label}

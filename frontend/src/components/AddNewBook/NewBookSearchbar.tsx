@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, {ChangeEvent, useEffect, useState} from "react";
 import {Alert, Autocomplete, Button, CircularProgress, Snackbar, TextField, Typography} from "@mui/material";
 import {GoogleBook} from "../../types/GoogleBook";
+import Checkboxes from "../Checkboxes/Checkboxes.tsx";
 
 
 interface BookDto {
@@ -38,6 +39,8 @@ export default function NewBookSearchbar() {
     const [timer, setTimer] = useState<number>();
     const [alert, setAlert] = useState<string>("");
     const [dbBooks, setDbBooks] = useState<BookDto[]>([]);
+    const [isRead, setIsRead] = useState(false);
+    const [isFavorite, setIsFavorite] = useState(false);
     const loading = open && options.length === 0;
 
 
@@ -74,8 +77,8 @@ export default function NewBookSearchbar() {
             genre: googleBook.volumeInfo.categories ? googleBook.volumeInfo.categories.join(", ") : "",
             publisher: googleBook.volumeInfo.publisher || "",
             isbn: googleBook.volumeInfo.industryIdentifiers ? googleBook.volumeInfo.industryIdentifiers[0].identifier : "",
-            favorite: false,
-            read: false,
+            favorite: isFavorite,
+            read: isRead,
             blurb: googleBook.volumeInfo.description || ""
         }
     }
@@ -94,7 +97,7 @@ export default function NewBookSearchbar() {
     }
 
    async function handleAddNewBook() {
-        if (selectedBook) {
+        if (selectedBook && isRead) {
             await fetchDbBooks();
             const bookExists = dbBooks.find(book => book.isbn === selectedBook.volumeInfo.industryIdentifiers[0].identifier);
             if (bookExists) {
@@ -180,8 +183,21 @@ export default function NewBookSearchbar() {
                     <Typography>Categories: {selectedBook.volumeInfo.categories.join(", ")}</Typography>
                     <Typography>Search Info: {selectedBook.volumeInfo.description}</Typography>
                     <Button variant={"contained"} color={"primary"} onClick={handleAddNewBook}>Buch hinzufügen</Button>
+                    <div>
+                        <Checkboxes
+                            checked={isRead}
+                            onChange={(e) => setIsRead(e.target.checked)}
+                            label={"Gelesen"}
+                        />
+                        <Checkboxes
+                            checked={isFavorite}
+                            onChange={(e) => setIsFavorite(e.target.checked)}
+                            label={"Favorit"}
+                        />
+                    </div>
                 </div>
             )}
+
             <Snackbar open={openSnackbar}
                       autoHideDuration={3000}
                       onClose={handleCloseSnackbar}
