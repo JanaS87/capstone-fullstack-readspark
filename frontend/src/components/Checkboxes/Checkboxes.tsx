@@ -16,6 +16,7 @@ export default function Checkboxes({checked, onChange, label}: CheckBoxProps) {
                 <Checkbox
                     checked={checked}
                     onChange={onChange}
+                    color={"primary"}
                 />
             }
                               label={label}
@@ -24,6 +25,7 @@ export default function Checkboxes({checked, onChange, label}: CheckBoxProps) {
                 <Checkbox
                     checked={checked}
                     onChange={onChange}
+                    color={"primary"}
                 />
             }
                               label={label}
