@@ -41,11 +41,11 @@ export default function Navbar({fetchBooks}: Readonly<NavbarProps>) {
                 showLabels
                 value={value}
                 onChange={handleChangeNavigation}
-                sx={{display: 'flex', justifyContent: 'center' ,width: 300, position: 'fixed', bottom: 0,  gap: 8}}
+                sx={{display: 'flex', justifyContent: 'center' ,width: 400, position: 'fixed', bottom: 0,  gap: 8, background: 'transparent'} }
             >
-                <BottomNavigationAction label="Übersicht" icon={<HomeIcon />}  />
-                <BottomNavigationAction label="Buch hinzufügen" icon={<PlusIcon />}  />
-                <BottomNavigationAction label="Favoriten" icon={<FavoriteIcon />}  />
+                <BottomNavigationAction label="Übersicht" icon={<HomeIcon fontSize={"large"} />}  />
+                <BottomNavigationAction label="Buch hinzufügen" icon={<PlusIcon fontSize={"large"} />}  />
+                <BottomNavigationAction label="Favoriten" icon={<FavoriteIcon fontSize={"large"} />}  />
             </BottomNavigation>
         </div>
     );
