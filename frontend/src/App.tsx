@@ -6,9 +6,10 @@ import {Route, Routes} from "react-router-dom";
 import BookDetailPage from "./components/BookDetailPage/BookDetailPage.tsx";
 import Navbar from "./components/navbar/Navbar.tsx";
 import AddNewBookPage from "./components/AddNewBook/AddNewBookPage.tsx";
+import {CombinedBook} from "./types/CombinedBook.ts";
 
 export default function App() {
-    const [books, setBooks] = useState<Book[]>([])
+    const [books, setBooks] = useState<CombinedBook[]>([])
 
     useEffect(() => {
         fetchBooks();
@@ -16,7 +17,15 @@ export default function App() {
     const fetchBooks = () => {
        axios.get('/api/books')
            .then(response => {
-               setBooks(response.data);
+               const books = response.data;
+               const promises = books.map(async (book: Book) => {
+                   const googleResponse = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=${book.isbn}`);
+                   return {...book, volumeInfo: googleResponse.data.items[0].volumeInfo};
+               } );
+                return Promise.all(promises);
+              })
+                .then(combinedBooks => {
+                    setBooks(combinedBooks);
            })
            .catch(error => {
                console.error('Error fetching Books: ', error);
