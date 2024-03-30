@@ -28,7 +28,7 @@ export default function App() {
           <Routes>
                 <Route path={"/"} element={<BookOverview books={books} fetchBooks={fetchBooks}/>}/>
                 <Route path={"/books/:id"} element={<BookDetailPage />}/>
-                <Route path={"/add"} element={<AddNewBookPage fetchBooks={fetchBooks} />}/>
+                <Route path={"/add"} element={<AddNewBookPage />}/>
           </Routes>
           <Navbar fetchBooks={fetchBooks}/>
       </>
