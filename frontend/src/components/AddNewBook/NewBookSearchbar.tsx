@@ -97,7 +97,7 @@ export default function NewBookSearchbar() {
     }
 
    async function handleAddNewBook() {
-        if (selectedBook && isRead) {
+        if (selectedBook) {
             await fetchDbBooks();
             const bookExists = dbBooks.find(book => book.isbn === selectedBook.volumeInfo.industryIdentifiers[0].identifier);
             if (bookExists) {
