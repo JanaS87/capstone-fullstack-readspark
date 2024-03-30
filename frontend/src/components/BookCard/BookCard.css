@@ -6,6 +6,15 @@
   margin-right: 10px;
 }
 
+.BookCard {
+  display: flex;
+  flex-direction: row;
+  margin-left: 10px;
+  margin-right: 10px;
+  text-decoration: none;
+    color: black;
+}
+
 .small-thumbnail {
   width: auto;
   height: 100px;
