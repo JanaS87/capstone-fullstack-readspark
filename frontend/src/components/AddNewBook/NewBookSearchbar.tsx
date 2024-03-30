@@ -3,6 +3,7 @@ import React, {ChangeEvent, useEffect, useState} from "react";
 import {Alert, Autocomplete, Button, CircularProgress, Snackbar, TextField, Typography} from "@mui/material";
 import {GoogleBook} from "../../types/GoogleBook";
 
+
 interface BookDto {
     title: string,
     author: string,
@@ -36,6 +37,7 @@ export default function NewBookSearchbar() {
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [timer, setTimer] = useState<number>();
     const [alert, setAlert] = useState<string>("");
+    const [dbBooks, setDbBooks] = useState<BookDto[]>([]);
     const loading = open && options.length === 0;
 
 
@@ -64,6 +66,7 @@ export default function NewBookSearchbar() {
         }
     }, [open]);
 
+
     function convertToBookDto(googleBook: GoogleBook) : BookDto{
         return {
             title: googleBook.volumeInfo.title || "",
@@ -77,10 +80,23 @@ export default function NewBookSearchbar() {
         }
     }
 
+   async function fetchDbBooks(): Promise<BookDto[]> {
+       await axios.get('/api/books')
+            .then(response => {
+                setDbBooks(response.data);
+                return response.data;
+            })
+            .catch(error => {
+                console.error('Error fetching Books: ', error);
+                console.error('Error Details: ', error.response);
+            });
+       return [];
+    }
 
-    function handleAddNewBook() {
+   async function handleAddNewBook() {
         if (selectedBook) {
-            const bookExists = books.find(book => book.volumeInfo.industryIdentifiers[0].identifier === selectedBook.volumeInfo.industryIdentifiers[0].identifier);
+            await fetchDbBooks();
+            const bookExists = dbBooks.find(book => book.isbn === selectedBook.volumeInfo.industryIdentifiers[0].identifier);
             if (bookExists) {
                 setAlert('Buch bereits vorhanden!');
                 return;
@@ -89,9 +105,11 @@ export default function NewBookSearchbar() {
             axios.post('/api/books', bookDto)
                 .then(response => {
                     setBooks(prevBooks => [...prevBooks, response.data]);
+                    console.log('Book added: ', books);
                     setOpenSnackbar(true);
                     setSelectedBook(null);
                     setSearchTerm("");
+                    fetchDbBooks();
                 })
                 .catch(error => {
                     console.error('Error adding book: ', error);
