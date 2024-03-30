@@ -7,7 +7,7 @@ export default function AddNewBookPage() {
         <div>
             <h1>Neues Buch hinzufügen</h1>
         </div>
-            <NewBookSearchbar />
+            <NewBookSearchbar  />
         </>
     )
 }
