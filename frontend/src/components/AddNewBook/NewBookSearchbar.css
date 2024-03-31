@@ -3,23 +3,41 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 20px;
+  margin-top: 10px;
   margin-bottom: 20px;
   overflow-y: auto;
-  max-height: calc(100vh - 150px);
+  max-height: calc(100vh - 130px);
+}
+
+.book-img {
+  margin-top: 10%;
 }
 
 .information-wrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
+  text-align: center;
+  margin-top: 5px;
+}
+
+.information-title {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.information-author {
+  font-size: 1rem;
+}
+
+.information-publisher {
+  font-size: 1rem;
+}
+
+information-category {
+  font-size: 1rem;
 }
 
 .description-text {
   text-align: center;
-  font-size: 0.6rem;
+  font-size: 0.88rem;
   margin: 20px 14px 10px;
 }
 

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, {ChangeEvent, useEffect, useState} from "react";
-import {Alert, Autocomplete, Button, CircularProgress, Snackbar, TextField, Typography} from "@mui/material";
+import {Alert, Autocomplete, Button, CircularProgress, Snackbar, TextField} from "@mui/material";
 import {GoogleBook} from "../../types/GoogleBook";
 import Checkboxes from "../Checkboxes/Checkboxes.tsx";
 import "./NewBookSearchbar.css";
@@ -179,13 +179,13 @@ export default function NewBookSearchbar() {
                     <img className={"book-img"} src={selectedBook.volumeInfo.imageLinks?.thumbnail}
                          alt={selectedBook.volumeInfo.title}/>
                     <div className={"information-wrapper"}>
-                        <Typography><span>Titel:</span> {selectedBook.volumeInfo.title}</Typography>
-                        <Typography><span>Autor:</span> {selectedBook.volumeInfo.authors.join(", ")}</Typography>
-                        <Typography><span>Verlag:</span> {selectedBook.volumeInfo.publisher}</Typography>
-                        <Typography><span>Genre:</span> {selectedBook.volumeInfo.categories.join(", ")}</Typography>
-                        <Typography
-                            className={"description-text"}><span>Beschreibung:</span> {selectedBook.volumeInfo.description}
-                        </Typography>
+                        <p className={"information-title"}><span>Titel:</span> {selectedBook.volumeInfo.title}</p>
+                        <p className={"information-author"}><span>Autor:</span> {selectedBook.volumeInfo.authors.join(", ")}</p>
+                        <p className={"information-publisher"}><span>Verlag:</span> {selectedBook.volumeInfo.publisher}</p>
+                        <p className={"information-category"}><span>Genre:</span> {selectedBook.volumeInfo.categories.join(", ")}</p>
+                        <p className={"description-text"}>
+                            <span>Beschreibung:</span> {selectedBook.volumeInfo.description}
+                        </p>
                     </div>
                     <div className={"checkbox-wrapper"}>
                         <Checkboxes
@@ -199,7 +199,7 @@ export default function NewBookSearchbar() {
                             label={"Favorit"}
                         />
                     </div>
-                    <Button className={"btn-primary"} variant={"contained"} color={"primary"}
+                    <Button className={"btn-primary"} aria-label={"add"} variant={"contained"} style={{backgroundColor: "#423F3E", color: "white"}}
                             onClick={handleAddNewBook}>Buch hinzufügen</Button>
 
                 </div>
