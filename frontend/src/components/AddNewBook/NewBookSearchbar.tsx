@@ -1,8 +1,9 @@
 import axios from 'axios';
 import React, {ChangeEvent, useEffect, useState} from "react";
-import {Alert, Autocomplete, Button, CircularProgress, Snackbar, TextField, Typography} from "@mui/material";
+import {Alert, Autocomplete, Button, CircularProgress, Snackbar, TextField} from "@mui/material";
 import {GoogleBook} from "../../types/GoogleBook";
 import Checkboxes from "../Checkboxes/Checkboxes.tsx";
+import "./NewBookSearchbar.css";
 
 
 interface BookDto {
@@ -174,16 +175,19 @@ export default function NewBookSearchbar() {
 
            />
             {selectedBook && (
-                <div>
-                    <Typography variant={"h6"}>Selected Book:</Typography>
-                    <img src={selectedBook.volumeInfo.imageLinks?.thumbnail} alt={selectedBook.volumeInfo.title}/>
-                    <Typography>Titel: {selectedBook.volumeInfo.title}</Typography>
-                    <Typography>Author: {selectedBook.volumeInfo.authors.join(", ")}</Typography>
-                    <Typography>Publisher: {selectedBook.volumeInfo.publisher}</Typography>
-                    <Typography>Categories: {selectedBook.volumeInfo.categories.join(", ")}</Typography>
-                    <Typography>Search Info: {selectedBook.volumeInfo.description}</Typography>
-                    <Button variant={"contained"} color={"primary"} onClick={handleAddNewBook}>Buch hinzufügen</Button>
-                    <div>
+                <div className={"selected-book-wrapper"}>
+                    <img className={"book-img"} src={selectedBook.volumeInfo.imageLinks?.thumbnail}
+                         alt={selectedBook.volumeInfo.title}/>
+                    <div className={"information-wrapper"}>
+                        <p className={"information-title"}><span>Titel:</span> {selectedBook.volumeInfo.title}</p>
+                        <p className={"information-author"}><span>Autor:</span> {selectedBook.volumeInfo.authors.join(", ")}</p>
+                        <p className={"information-publisher"}><span>Verlag:</span> {selectedBook.volumeInfo.publisher}</p>
+                        <p className={"information-category"}><span>Genre:</span> {selectedBook.volumeInfo.categories.join(", ")}</p>
+                        <p className={"description-text"}>
+                            <span>Beschreibung:</span> {selectedBook.volumeInfo.description}
+                        </p>
+                    </div>
+                    <div className={"checkbox-wrapper"}>
                         <Checkboxes
                             checked={isRead}
                             onChange={(e) => setIsRead(e.target.checked)}
@@ -195,14 +199,17 @@ export default function NewBookSearchbar() {
                             label={"Favorit"}
                         />
                     </div>
+                    <Button className={"btn-primary"} aria-label={"add"} variant={"contained"} style={{backgroundColor: "#423F3E", color: "white"}}
+                            onClick={handleAddNewBook}>Buch hinzufügen</Button>
+
                 </div>
             )}
 
             <Snackbar open={openSnackbar}
                       autoHideDuration={3000}
                       onClose={handleCloseSnackbar}
-            anchorOrigin={{vertical: 'top', horizontal: 'right'}}>
-                <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%' }}>
+                      anchorOrigin={{vertical: 'top', horizontal: 'right'}}>
+                <Alert onClose={handleCloseSnackbar} severity="success" sx={{width: '100%'}}>
                     Buch erfolgreich hinzugefügt!
                 </Alert>
             </Snackbar>

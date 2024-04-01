@@ -1,0 +1,31 @@
+.book-card-container {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 20px;
+  margin-left: 20px;
+  margin-right: 10px;
+}
+
+.BookCard {
+  display: flex;
+  flex-direction: row;
+  margin-left: 10px;
+  margin-right: 10px;
+  text-decoration: none;
+    color: black;
+}
+
+.small-thumbnail {
+  width: auto;
+  height: 100px;
+  margin-right: 10px;
+}
+
+.BookTitle {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.BookAuthor {
+  font-size: 16px;
+}

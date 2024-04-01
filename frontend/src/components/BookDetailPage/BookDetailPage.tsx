@@ -2,6 +2,8 @@ import {Book} from "../../types/Book.ts";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {Link, useParams} from "react-router-dom";
+import "./BookDetailPage.css";
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
 export default function BookDetailPage() {
     const {id} = useParams<{id: string}>();
@@ -39,16 +41,19 @@ export default function BookDetailPage() {
 
     return (
         <div>
-            <h1>Book Detail Page</h1>
-            <Link to={'/'}>Übersicht</Link>
-            {book && (
-                <div>
+            <div className={"link-wrapper"}>
+            <Link className={"back-link"} to={'/'}><ArrowBackIosIcon/> Übersicht</Link>
+            </div>
+                {book && (
+                <div className={"book-details-wrapper"}>
                     {bookImage && <img src={bookImage} alt={"Buchcover"}/>}
-                    <h2>{book.title}</h2>
-                    <h3>{book.author}</h3>
+                    <div className={"book-details"}>
+                    <h2 className={"header-md"}>{book.title}</h2>
+                    <h3 className={"header-sm"}>{book.author}</h3>
                     <p>{book.publisher}</p>
                     <p>{book.genre}</p>
-                    <p>{book.blurb}</p>
+                    <p className={"book-details--description"}>{book.blurb}</p>
+                    </div>
                 </div>
             )}
         </div>

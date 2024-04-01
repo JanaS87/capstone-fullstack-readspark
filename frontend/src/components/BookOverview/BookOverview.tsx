@@ -1,15 +1,16 @@
-import {Book} from "../../types/Book.ts";
+import {CombinedBook} from "../../types/CombinedBook.ts";
 import BookCard from "../BookCard/BookCard.tsx";
+import "./BookOverview.css";
 
 type BookOverviewProps = {
-    books: Book[],
+    books: CombinedBook[],
     fetchBooks: () => void
 }
 export default function BookOverview(props: Readonly<BookOverviewProps>) {
 
     return (
         <div className={"book-container"} >
-            <h1>Übersicht</h1>
+            <h1 className={"header-title"}>Übersicht</h1>
             <div className={"book-card"}>
                 {props.books.map(book =>
                     <BookCard key={book.id}  book={book}/>)}

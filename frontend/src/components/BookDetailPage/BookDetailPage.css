@@ -1,0 +1,39 @@
+.link-wrapper {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.back-link {
+    font-weight: bold;
+    margin-bottom: 40px;
+    margin-left: 10px;
+    font-size: 2rem;
+    margin-top: 20px;
+    text-decoration: none;
+    color: #000;
+}
+
+.book-details-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 5px;
+}
+
+.book-details {
+    text-align: center;
+    margin-top: 8px;
+}
+
+.header-md {
+    font-size: 1.4rem;
+}
+
+.header-sm {
+    font-size: 1.2rem;
+}
+
+.book-details--description {
+    margin: 10px 10px 20px;
+}
