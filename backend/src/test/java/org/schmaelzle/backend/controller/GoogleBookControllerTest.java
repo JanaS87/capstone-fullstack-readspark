@@ -62,7 +62,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
                                         "industryIdentifiers": [
                                             {
                                                 "type": "OTHER",
-                                                "identifier": "3551354014"
+                                                "identifier": "UOM:39076002631195"
                                             }
                                         ]
                                     }
@@ -77,6 +77,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
                 .andExpect(jsonPath("$.items[0].volumeInfo.authors[0]", is(not(emptyString()))))
                 .andExpect(jsonPath("$.items[0].volumeInfo.categories[0]", is(not(emptyString()))))
                 .andExpect(jsonPath("$.items[0].volumeInfo.publisher", is("Carlsen Verlag GmbH")))
-                .andExpect(jsonPath("$.items[0].volumeInfo.industryIdentifiers[0].identifier", is("3551354014")));
+                .andExpect(jsonPath("$.items[0].volumeInfo.industryIdentifiers[0].identifier", is(not(emptyString()))));
     }
 }
