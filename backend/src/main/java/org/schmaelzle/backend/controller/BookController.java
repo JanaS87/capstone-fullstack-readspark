@@ -33,6 +33,11 @@ public class BookController {
         return service.addBook(book);
     }
 
+    @GetMapping("/favorites")
+    public List<Book> getFavoriteBooks() {
+        return service.getFavoriteBooks();
+    }
+
 
     @ExceptionHandler(NoSuchElementException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)

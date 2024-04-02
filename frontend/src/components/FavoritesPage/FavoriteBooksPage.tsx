@@ -1,4 +1,5 @@
 import {CombinedBook} from "../../types/CombinedBook.ts";
+import BookCard from "../BookCard/BookCard.tsx";
 
 type FavoriteBooksPageProps = {
     fetchFavoriteBooks: () => void,
@@ -7,8 +8,13 @@ type FavoriteBooksPageProps = {
 
 export default function FavoriteBooksPage(props: Readonly<FavoriteBooksPageProps>) {
     return (
-        <div>
+        <>
             <h1>Favorite Books</h1>
-        </div>
+
+            <div className={"book-card"}>
+                {props.favorites.map(book =>
+                    <BookCard key={book.id} book={book}/>)}
+            </div>
+        </>
     )
 }

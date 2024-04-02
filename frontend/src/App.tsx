@@ -55,9 +55,6 @@ export default function App() {
             });
     }
 
-
-
-
   return (
       <>
           <Routes>
@@ -66,7 +63,7 @@ export default function App() {
                 <Route path={"/add"} element={<AddNewBookPage />}/>
                 <Route path={"/favorites"} element={<FavoriteBooksPage favorites={favorites} fetchFavoriteBooks={fetchFavoriteBooks}/>}/>
           </Routes>
-          <Navbar fetchBooks={fetchBooks}/>
+          <Navbar fetchBooks={fetchBooks} fetchFavoriteBooks={fetchFavoriteBooks}/>
       </>
 
   )
