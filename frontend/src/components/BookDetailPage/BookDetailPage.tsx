@@ -4,11 +4,19 @@ import axios from "axios";
 import {Link, useParams} from "react-router-dom";
 import "./BookDetailPage.css";
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import CreateIcon from '@mui/icons-material/Create';
+import Dialog from '@mui/material/Dialog';
+import {DialogActions, DialogContent, DialogTitle} from "@mui/material";
+import Checkboxes from "../Checkboxes/Checkboxes.tsx";
 
 export default function BookDetailPage() {
     const {id} = useParams<{id: string}>();
     const [book, setBook] = useState<Book | null>(null)
     const [bookImage, setBookImage] = useState<string | null>(null)
+    const [open, setOpen] = useState(false);
+    const [read, setRead] = useState(book?.read || false);
+    const [favorite, setFavorite] = useState(book?.favorite || false);
+
 
     useEffect(() => {
         axios.get(`/api/books/${id}`)
@@ -38,11 +46,51 @@ export default function BookDetailPage() {
         }
     }, [book]);
 
+    function handleClickDialogOpen() {
+        if(book) {
+            setRead(book.read);
+            setFavorite(book.favorite);
+        }
+        setOpen(true);
+    }
+
+    function handleClickDialogClose() {
+        setOpen(false);
+    }
+
+    function updateBook(book: Book) {
+        axios.put(`/api/books/${id}`, book)
+            .then(response => {
+                setBook(response.data);
+            })
+            .catch(error => {
+                console.error('Error updating Book: ', error);
+                console.error('Error Details: ', error.response);
+            });
+    }
 
     return (
         <div>
             <div className={"link-wrapper"}>
             <Link className={"back-link"} to={'/'}><ArrowBackIosIcon/> Übersicht</Link>
+                <CreateIcon className={"edit-link"} onClick={handleClickDialogOpen} />
+                <Dialog open={open} onClose={handleClickDialogClose}>
+                    <DialogTitle>Info aktualisieren</DialogTitle>
+                    <DialogContent>
+                        <Checkboxes checked={read} onChange={(event) => setRead(event.target.checked)} label={"Gelesen"}/>
+                        <Checkboxes checked={favorite} onChange={(event) => setFavorite(event.target.checked)} label={"Favorit"}/>
+                    </DialogContent>
+                    <DialogActions>
+                        <button onClick={handleClickDialogClose}>Abbrechen</button>
+                        <button onClick={() => {
+                            if(book?.id){
+                            updateBook({...book, read, favorite});
+                            handleClickDialogClose();
+                        }}}>Speichern</button>
+                    </DialogActions>
+                </Dialog>
+
+
             </div>
                 {book && (
                 <div className={"book-details-wrapper"}>

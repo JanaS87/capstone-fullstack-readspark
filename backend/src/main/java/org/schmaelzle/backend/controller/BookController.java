@@ -38,6 +38,11 @@ public class BookController {
         return service.getFavoriteBooks();
     }
 
+    @PutMapping("/{id}")
+    public Book updateBook(@PathVariable String id, @RequestBody BookDto book) {
+        return service.updateBook(id, book);
+    }
+
 
     @ExceptionHandler(NoSuchElementException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)

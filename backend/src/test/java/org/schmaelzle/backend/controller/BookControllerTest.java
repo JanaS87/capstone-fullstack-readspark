@@ -127,4 +127,43 @@ class BookControllerTest {
                         }]
                         """));
     }
+
+    @Test
+    void updateBook_whenCalledWithValidId_thenReturnUpdatedBook() throws Exception {
+        //GIVEN
+        Book book = new Book("1", "Harry Potter", "J.K. Rowling", "Fantasy", "Carlson", "3-551-55167-7", false,
+                false, "Bis zu seinem elften Geburtstag glaubt Harry, er sei ein ganz normaler Junge. Doch dann erfährt er, dass er sich an der Schule für Hexerei und Zauberei einfinden soll – " +
+                "denn er ist ein Zauberer! In Hogwarts stürzt Harry von einem Abenteuer ins nächste und muss gegen Bestien, Mitschüler und Fabelwesen kämpfen. Da ist es gut, " +
+                "dass er schon Freunde gefunden hat, die ihm im Kampf gegen die dunklen Mächte zur Seite stehen.");
+        repo.save(book);
+        //WHEN&THEN
+        mvc.perform(MockMvcRequestBuilders.put("/api/books/1")
+                        .contentType("application/json")
+                        .content("""
+                                {
+                                    "title": "Harry Potter",
+                                    "author": "J.K. Rowling",
+                                    "genre": "Fantasy",
+                                    "publisher": "Carlson",
+                                    "isbn": "3-551-55167-7",
+                                    "favorite": true,
+                                    "read": false,
+                                    "blurb": "Bis zu seinem elften Geburtstag glaubt Harry, er sei ein ganz normaler Junge. Doch dann erfährt er, dass er sich an der Schule für Hexerei und Zauberei einfinden soll – denn er ist ein Zauberer! In Hogwarts stürzt Harry von einem Abenteuer ins nächste und muss gegen Bestien, Mitschüler und Fabelwesen kämpfen. Da ist es gut, dass er schon Freunde gefunden hat, die ihm im Kampf gegen die dunklen Mächte zur Seite stehen."
+                                }
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(content().json("""
+                        {
+                            "id": "1",
+                            "title": "Harry Potter",
+                            "author": "J.K. Rowling",
+                            "genre": "Fantasy",
+                            "publisher": "Carlson",
+                            "isbn": "3-551-55167-7",
+                            "favorite": true,
+                            "read": false,
+                            "blurb": "Bis zu seinem elften Geburtstag glaubt Harry, er sei ein ganz normaler Junge. Doch dann erfährt er, dass er sich an der Schule für Hexerei und Zauberei einfinden soll – denn er ist ein Zauberer! In Hogwarts stürzt Harry von einem Abenteuer ins nächste und muss gegen Bestien, Mitschüler und Fabelwesen kämpfen. Da ist es gut, dass er schon Freunde gefunden hat, die ihm im Kampf gegen die dunklen Mächte zur Seite stehen."
+                        }
+                            """));
+    }
 }
