@@ -30,4 +30,8 @@ public class BookService {
         Book newBook = new Book(null, book.title(), book.author(), book.genre(), book.publisher(), book.isbn(), book.favorite(), book.read(), book.blurb());
         return repo.save(newBook);
     }
+
+    public List<Book> getFavoriteBooks() {
+        return repo.findByFavoriteTrue();
+    }
 }

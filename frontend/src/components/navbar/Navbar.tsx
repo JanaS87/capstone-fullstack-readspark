@@ -8,10 +8,11 @@ import './Navbar.css'
 import {useNavigate} from "react-router-dom";
 
 type NavbarProps = {
-    fetchBooks: () => void
+    fetchBooks: () => void,
+    fetchFavoriteBooks: () => void
 }
 
-export default function Navbar({fetchBooks}: Readonly<NavbarProps>) {
+export default function Navbar({fetchBooks, fetchFavoriteBooks}: Readonly<NavbarProps>) {
     const [value, setValue] = React.useState(0);
     const navigate = useNavigate();
 
@@ -27,6 +28,7 @@ export default function Navbar({fetchBooks}: Readonly<NavbarProps>) {
                 navigate('/add');
                 break;
             case 2:
+                fetchFavoriteBooks();
                 navigate('/favorites');
                 break;
             default:
