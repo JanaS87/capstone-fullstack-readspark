@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 import org.schmaelzle.backend.model.Book;
 import org.schmaelzle.backend.model.BookDto;
 import org.schmaelzle.backend.repository.BookRepository;
-import org.springframework.data.mongodb.core.MongoOperations;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,6 +69,33 @@ class BookServiceTest {
         verify(repo).save(any(Book.class));
         assertEquals(newBook, actual);
 
+    }
+
+    @Test
+    void getFavoriteBooks_whenCalled_thenReturnFavoriteBooks() {
+        // GIVEN
+        Book book1 = new Book("1", "Harry Potter", "J.K. Rowling", "Fantasy","Carlson" , "3-551-55167-7", true,
+                false, "Bis zu seinem elften Geburtstag glaubt Harry, er sei ein ganz normaler Junge. Doch dann erfährt er, dass er sich an der Schule für Hexerei und Zauberei einfinden soll – " +
+                        "denn er ist ein Zauberer! In Hogwarts stürzt Harry von einem Abenteuer ins nächste und muss gegen Bestien, Mitschüler und Fabelwesen kämpfen. Da ist es gut, " +
+                        "dass er schon Freunde gefunden hat, die ihm im Kampf gegen die dunklen Mächte zur Seite stehen.");
+
+        Book book2 = new Book("2", "Der Marsianer", "Andy Weir", "Science Fiction","Carlson" , "3-551-55167-7", true,
+                false, "Der Marsianer ist ein Science-Fiction-Roman des US-amerikanischen Schriftstellers Andy Weir. Die Handlung spielt in der nahen Zukunft, in der die NASA eine bemannte Marsmission durchführt. Der Astronaut Mark Watney wird aufgrund eines Unfalls für tot gehalten und von der Crew zurückgelassen. " +
+                "Er überlebt jedoch und muss versuchen, auf dem Mars zu überleben, bis eine Rettungsmission eintrifft.");
+
+        List<Book> favoriteBooks = new ArrayList<>();
+        favoriteBooks.add(book1);
+        favoriteBooks.add(book2);
+
+        when(repo.findByFavoriteTrue()).thenReturn(favoriteBooks);
+
+        // WHEN
+
+        List<Book> actual = service.getFavoriteBooks();
+
+        // THEN
+        verify(repo).findByFavoriteTrue();
+        assertEquals(favoriteBooks, actual);
     }
 
 
