@@ -7,13 +7,16 @@ import BookDetailPage from "./components/BookDetailPage/BookDetailPage.tsx";
 import Navbar from "./components/navbar/Navbar.tsx";
 import AddNewBookPage from "./components/AddNewBook/AddNewBookPage.tsx";
 import {CombinedBook} from "./types/CombinedBook.ts";
+import FavoriteBooksPage from "./components/FavoritesPage/FavoriteBooksPage.tsx";
 
 export default function App() {
     const [books, setBooks] = useState<CombinedBook[]>([])
+    const [favorites, setFavorites] = useState<CombinedBook[]>([])
 
     useEffect(() => {
         fetchBooks();
     }, []);
+
     const fetchBooks = () => {
        axios.get('/api/books')
            .then(response => {
@@ -32,12 +35,36 @@ export default function App() {
                console.error('Error Details: ', error.response);
            });
     }
+
+    const fetchFavoriteBooks = () => {
+        axios.get('/api/books/favorites')
+            .then(response => {
+                const books = response.data;
+                const promises = books.map(async (book: Book) => {
+                    const googleResponse = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=${book.isbn}`);
+                    return {...book, volumeInfo: googleResponse.data.items[0].volumeInfo};
+                } );
+                return Promise.all(promises);
+            })
+            .then(combinedBooks => {
+                setFavorites(combinedBooks);
+            })
+            .catch(error => {
+                console.error('Error fetching Books: ', error);
+                console.error('Error Details: ', error.response);
+            });
+    }
+
+
+
+
   return (
       <>
           <Routes>
                 <Route path={"/"} element={<BookOverview books={books} fetchBooks={fetchBooks}/>}/>
                 <Route path={"/books/:id"} element={<BookDetailPage />}/>
                 <Route path={"/add"} element={<AddNewBookPage />}/>
+                <Route path={"/favorites"} element={<FavoriteBooksPage favorites={favorites} fetchFavoriteBooks={fetchFavoriteBooks}/>}/>
           </Routes>
           <Navbar fetchBooks={fetchBooks}/>
       </>

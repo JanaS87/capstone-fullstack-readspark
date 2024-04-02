@@ -9,6 +9,8 @@ type BookCardProps = {
 
 export default function BookCard(props: Readonly<BookCardProps>) {
 
+    console.log("book in BookCard: ", props.book);
+
     if (!props.book || !props.book.volumeInfo) {
         return null;
     }
