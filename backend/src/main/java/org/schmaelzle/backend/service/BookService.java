@@ -41,4 +41,9 @@ public class BookService {
         existingBook.setRead(book.read());
         return repo.save(existingBook);
     }
+
+    public void deleteBookById(String id) {
+        Book existingBook =  getBookById(id);
+        repo.delete(existingBook);
+    }
 }

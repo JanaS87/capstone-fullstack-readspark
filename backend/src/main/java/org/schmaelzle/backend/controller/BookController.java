@@ -43,6 +43,11 @@ public class BookController {
         return service.updateBook(id, book);
     }
 
+    @DeleteMapping("/{id}")
+    public void deleteBookById(@PathVariable String id) {
+        service.deleteBookById(id);
+    }
+
 
     @ExceptionHandler(NoSuchElementException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)

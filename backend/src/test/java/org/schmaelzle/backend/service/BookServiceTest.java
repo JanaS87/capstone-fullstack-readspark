@@ -122,5 +122,27 @@ class BookServiceTest {
         assertEquals(existingBook, actual);
     }
 
+    @Test
+    void deleteBookById_whenCalledWithValidId_thenDeleteBook() {
+        // GIVEN
+        String id = "1";
+        Book existingBook = new Book("1", "Harry Potter", "J.K. Rowling", "Fantasy","Carlson" , "3-551-55167-7", false,
+                false, "Bis zu seinem elften Geburtstag glaubt Harry, er sei ein ganz normaler Junge. Doch dann erfährt er, dass er sich an der Schule für Hexerei und Zauberei einfinden soll – " +
+                        "denn er ist ein Zauberer! In Hogwarts stürzt Harry von einem Abenteuer ins nächste und muss gegen Bestien, Mitschüler und Fabelwesen kämpfen. Da ist es gut, " +
+                        "dass er schon Freunde gefunden hat, die ihm im Kampf gegen die dunklen Mächte zur Seite stehen.");
+        when(repo.findById(id)).thenReturn(Optional.of(existingBook));
+
+        // WHEN
+        service.deleteBookById(id);
+
+        // THEN
+        verify(repo).delete(existingBook);
+    }
+
+    @Test
+    void deleteBookById_whenCalledWithInvalidId_thenThrowNoSuchElementException() {
+        assertThrows(NoSuchElementException.class, () -> service.deleteBookById("123"));
+    }
+
 
 }

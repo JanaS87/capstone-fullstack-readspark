@@ -72,8 +72,21 @@ export default function BookDetailPage() {
             });
     }
 
+    function deleteBook() {
+        if(window.confirm("Buch wirklich löschen?")) {
+            axios.delete(`/api/books/${id}`)
+                .then(() => {
+                    window.location.href = '/';
+                })
+                .catch(error => {
+                    console.error('Error deleting Book: ', error);
+                    console.error('Error Details: ', error.response);
+                });
+        }
+    }
+
     return (
-        <div>
+        <>
             <div className={"link-wrapper"}>
                 <div className={"link-icon-wrapper"}>
             <Link className={"back-link"} to={'/'}><ArrowBackIosIcon/> Übersicht</Link>
@@ -94,6 +107,7 @@ export default function BookDetailPage() {
                             updateBook({...book, read, favorite});
                             handleClickDialogClose();
                         }}}>Speichern</button>
+                        <button onClick={deleteBook}>Löschen</button>
                     </DialogActions>
                 </Dialog>
             </div>
@@ -109,6 +123,6 @@ export default function BookDetailPage() {
                     </div>
                 </div>
             )}
-        </div>
+        </>
     )
 }
