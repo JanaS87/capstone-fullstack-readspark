@@ -11,6 +11,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -165,5 +166,30 @@ class BookControllerTest {
                             "blurb": "Bis zu seinem elften Geburtstag glaubt Harry, er sei ein ganz normaler Junge. Doch dann erfährt er, dass er sich an der Schule für Hexerei und Zauberei einfinden soll – denn er ist ein Zauberer! In Hogwarts stürzt Harry von einem Abenteuer ins nächste und muss gegen Bestien, Mitschüler und Fabelwesen kämpfen. Da ist es gut, dass er schon Freunde gefunden hat, die ihm im Kampf gegen die dunklen Mächte zur Seite stehen."
                         }
                             """));
+    }
+
+    @Test
+    void deleteBookById_whenCalledWithValidId_thenDeleteBook() throws Exception {
+        //GIVEN
+        Book book = new Book("1", "Harry Potter", "J.K. Rowling", "Fantasy", "Carlson", "3-551-55167-7", false,
+                false, "Bis zu seinem elften Geburtstag glaubt Harry, er sei ein ganz normaler Junge. Doch dann erfährt er, dass er sich an der Schule für Hexerei und Zauberei einfinden soll – " +
+                        "denn er ist ein Zauberer! In Hogwarts stürzt Harry von einem Abenteuer ins nächste und muss gegen Bestien, Mitschüler und Fabelwesen kämpfen. Da ist es gut, " +
+                        "dass er schon Freunde gefunden hat, die ihm im Kampf gegen die dunklen Mächte zur Seite stehen.");
+        repo.save(book);
+        //WHEN&THEN
+        mvc.perform(MockMvcRequestBuilders.delete("/api/books/1"))
+                .andExpect(status().isOk());
+
+        assertFalse(repo.findById("1").isPresent());
+    }
+
+    @Test
+    void deleteBookById_whenCalledWithInvalidId_thenThrowNoSuchElementException() throws Exception {
+        //GIVEN
+        String invalidId = "123";
+
+        //WHEN&THEN
+        mvc.perform(MockMvcRequestBuilders.delete("/api/books/" + invalidId))
+                .andExpect(status().isNotFound());
     }
 }
