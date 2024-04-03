@@ -86,7 +86,7 @@ export default function BookDetailPage() {
     }
 
     return (
-        <div>
+        <>
             <div className={"link-wrapper"}>
                 <div className={"link-icon-wrapper"}>
             <Link className={"back-link"} to={'/'}><ArrowBackIosIcon/> Übersicht</Link>
@@ -123,6 +123,6 @@ export default function BookDetailPage() {
                     </div>
                 </div>
             )}
-        </div>
+        </>
     )
 }
