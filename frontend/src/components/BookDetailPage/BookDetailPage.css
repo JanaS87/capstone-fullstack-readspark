@@ -4,6 +4,13 @@
     margin-top: 10px;
 }
 
+.link-icon-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    width: 100%;
+}
+
 .back-link {
     font-weight: bold;
     margin-bottom: 40px;
@@ -12,7 +19,31 @@
     margin-top: 20px;
     text-decoration: none;
     color: #000;
+    vertical-align: middle;
 }
+
+.read-icon-filled {
+    color: #000;
+    height: 25px;
+    width: 25px;
+}
+
+.read-icon-outlined {
+    color: #000;
+    height: 25px;
+    width: 25px;
+}
+
+.edit-icon {
+    margin-right: 10px;
+    color: #000;
+    vertical-align: middle;
+}
+
+.edit-icon:hover {
+    cursor: pointer;
+}
+
 
 .book-details-wrapper {
     display: flex;

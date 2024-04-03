@@ -8,6 +8,9 @@ import CreateIcon from '@mui/icons-material/Create';
 import Dialog from '@mui/material/Dialog';
 import {DialogActions, DialogContent, DialogTitle} from "@mui/material";
 import Checkboxes from "../Checkboxes/Checkboxes.tsx";
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+
 
 export default function BookDetailPage() {
     const {id} = useParams<{id: string}>();
@@ -72,8 +75,12 @@ export default function BookDetailPage() {
     return (
         <div>
             <div className={"link-wrapper"}>
+                <div className={"link-icon-wrapper"}>
             <Link className={"back-link"} to={'/'}><ArrowBackIosIcon/> Übersicht</Link>
-                <CreateIcon className={"edit-link"} onClick={handleClickDialogOpen} />
+                    {book?.read ? <img src={"/book-filled.svg"} className={"read-icon-filled"} alt={"a filled book"}/> : <img src={"/book-outlined.svg"} className={"read-icon-outlined"} alt={"an outlined book"}/> }
+                    {book?.favorite ? <FavoriteIcon className={"favorite-icon"}/> : <FavoriteBorderIcon className={"favorite-icon"}/> }
+                <CreateIcon className={"edit-icon"} onClick={handleClickDialogOpen} />
+                </div>
                 <Dialog open={open} onClose={handleClickDialogClose}>
                     <DialogTitle>Info aktualisieren</DialogTitle>
                     <DialogContent>
@@ -89,8 +96,6 @@ export default function BookDetailPage() {
                         }}}>Speichern</button>
                     </DialogActions>
                 </Dialog>
-
-
             </div>
                 {book && (
                 <div className={"book-details-wrapper"}>
