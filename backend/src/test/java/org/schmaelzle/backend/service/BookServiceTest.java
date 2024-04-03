@@ -8,6 +8,7 @@ import org.schmaelzle.backend.repository.BookRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -96,6 +97,29 @@ class BookServiceTest {
         // THEN
         verify(repo).findByFavoriteTrue();
         assertEquals(favoriteBooks, actual);
+    }
+
+    @Test
+    void updateBook_whenCalledWithValidId_thenReturnUpdatedBook() {
+        // GIVEN
+        BookDto book = new BookDto("Harry Potter", "J.K. Rowling", "Fantasy", "Carlson", "3-551-55167-7", true, true,
+                "Bis zu seinem elften Geburtstag glaubt Harry, er sei ein ganz normaler Junge. Doch dann erfährt er, dass er sich an der Schule für Hexerei und Zauberei einfinden soll – " +
+                        "denn er ist ein Zauberer! In Hogwarts stürzt Harry von einem Abenteuer ins nächste und muss gegen Bestien, Mitschüler und Fabelwesen kämpfen. Da ist es gut, " +
+                        "dass er schon Freunde gefunden hat, die ihm im Kampf gegen die dunklen Mächte zur Seite stehen.");
+        Book existingBook = new Book("1", "Harry Potter", "J.K. Rowling", "Fantasy","Carlson" , "3-551-55167-7", false,
+                false, "Bis zu seinem elften Geburtstag glaubt Harry, er sei ein ganz normaler Junge. Doch dann erfährt er, dass er sich an der Schule für Hexerei und Zauberei einfinden soll – " +
+                        "denn er ist ein Zauberer! In Hogwarts stürzt Harry von einem Abenteuer ins nächste und muss gegen Bestien, Mitschüler und Fabelwesen kämpfen. Da ist es gut, " +
+                        "dass er schon Freunde gefunden hat, die ihm im Kampf gegen die dunklen Mächte zur Seite stehen.");
+        when(repo.findById("1")).thenReturn(Optional.of(existingBook));
+        when(repo.save(existingBook)).thenReturn(existingBook);
+
+        // WHEN
+        Book actual = service.updateBook("1", book);
+
+        // THEN
+        verify(repo).findById("1");
+        verify(repo).save(existingBook);
+        assertEquals(existingBook, actual);
     }
 
 

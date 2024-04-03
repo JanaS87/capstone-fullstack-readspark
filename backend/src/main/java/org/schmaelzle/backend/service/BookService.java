@@ -34,4 +34,11 @@ public class BookService {
     public List<Book> getFavoriteBooks() {
         return repo.findByFavoriteTrue();
     }
+
+    public Book updateBook(String id, BookDto book) {
+        Book existingBook =  repo.findById(id).orElseThrow(() -> new NoSuchElementException("Element with Id: " + id +" not found"));
+        existingBook.setFavorite(book.favorite());
+        existingBook.setRead(book.read());
+        return repo.save(existingBook);
+    }
 }
