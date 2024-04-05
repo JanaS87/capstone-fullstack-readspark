@@ -53,7 +53,13 @@ export default function AddNewBookPage() {
     async function fetchBookByIsbn(isbn: string) {
         await axios.get(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`)
             .then(response => {
-                setSelectedBook(response.data.items[0]); // Speichern Sie das gefundene Buch im Zustand
+                if  (response.data.items && response.data.items.length > 0) {
+                    setSelectedBook(response.data.items[0]);
+                } else {
+                    console.error('No book found for ISBN: ', isbn);
+                    setAlert('Kein Buch gefunden!');
+                }
+
             })
             .catch(error => {
                 console.error('Error fetching Books: ', error);
@@ -79,7 +85,10 @@ export default function AddNewBookPage() {
         console.log(book);
         if(selectedBook) {
             const fetchedDbBooks = await fetchDbBooks();
-            const bookExists = fetchedDbBooks.find((dbBook) => dbBook.isbn === selectedBook.volumeInfo.industryIdentifiers[0].identifier);
+            const bookExists = fetchedDbBooks.find((dbBook) =>
+                dbBook.isbn === selectedBook.volumeInfo.industryIdentifiers[0].identifier &&
+            dbBook.title === selectedBook.volumeInfo.title &&
+            dbBook.author === selectedBook.volumeInfo.authors.join(", "));
             if (bookExists) {
                 setAlert('Buch bereits vorhanden!');
                 return;
@@ -138,9 +147,9 @@ export default function AddNewBookPage() {
                              alt={selectedBook.volumeInfo.title}/>
                         <div className={"information-wrapper"}>
                             <p className={"information-title"}><span>Titel:</span> {selectedBook.volumeInfo.title}</p>
-                            <p className={"information-author"}><span>Autor:</span> {selectedBook.volumeInfo.authors.join(", ")}</p>
+                            <p className={"information-author"}><span>Autor:</span> {selectedBook.volumeInfo.authors?.join(", ")}</p>
                             <p className={"information-publisher"}><span>Verlag:</span> {selectedBook.volumeInfo.publisher}</p>
-                            <p className={"information-category"}><span>Genre:</span> {selectedBook.volumeInfo.categories.join(", ")}</p>
+                            <p className={"information-category"}><span>Genre:</span> {selectedBook.volumeInfo.categories?.join(", ")}</p>
                             <p className={"description-text"}>
                                 <span>Beschreibung:</span> {selectedBook.volumeInfo.description}
                             </p>
