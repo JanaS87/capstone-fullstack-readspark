@@ -67,80 +67,80 @@ export default function AddNewBookPage() {
 
     }
 
-    async function fetchDbBooks(): Promise<BookDto[]> {
-        await axios.get('/api/books')
-            .then(response => {
-                return(response.data);
-            })
-            .catch(error => {
-                console.error('Error fetching Books: ', error);
-                console.error('Error Details: ', error.response);
-            });
-        return [];
-    }
-
-
-    async function handleAddSearchedBook(isbn: string) {
-        const book = await fetchBookByIsbn(isbn);
-        console.log(book);
-        if(selectedBook) {
-            const fetchedDbBooks = await fetchDbBooks();
-            const bookExists = fetchedDbBooks.find((dbBook) =>
-                dbBook.isbn === selectedBook.volumeInfo.industryIdentifiers[0].identifier &&
-            dbBook.title === selectedBook.volumeInfo.title &&
-            dbBook.author === selectedBook.volumeInfo.authors.join(", "));
-            if (bookExists) {
-                setAlert('Buch bereits vorhanden!');
-                return;
-            }
-            const bookDto = convertToBookDto(selectedBook);
-            axios.post('/api/books', bookDto)
+        async function fetchDbBooks(): Promise<BookDto[]> {
+            await axios.get('/api/books')
                 .then(response => {
-                    setBooks(prevBooks => [...prevBooks, response.data]);
-                    console.log('Book added: ', books);
-                    setOpenSnackbar(true);
-                    setSelectedBook(null);
-                    fetchDbBooks();
+                return(response.data);
                 })
                 .catch(error => {
-                    console.error('Error adding book: ', error);
+                    console.error('Error fetching Books: ', error);
+                    console.error('Error Details: ', error.response);
                 });
+            return [];
         }
-    }
 
-    function handleScannerToggle() {
-        setIsScannerActive(!isScannerActive)
-    }
 
-    function handleCloseSnackbar(_?: React.SyntheticEvent | Event, reason?: string) {
-        if (reason === 'clickaway') {
-            return;
+        async function handleAddSearchedBook(isbn: string) {
+            const book = await fetchBookByIsbn(isbn);
+        console.log(book);
+        if(selectedBook) {
+                const fetchedDbBooks = await fetchDbBooks();
+                const bookExists = fetchedDbBooks.find((dbBook) =>
+                dbBook.isbn === selectedBook.volumeInfo.industryIdentifiers[0].identifier ||
+            dbBook.title === selectedBook.volumeInfo.title ||
+                    dbBook.author === selectedBook.volumeInfo.authors.join(", "));
+                if (bookExists) {
+                    setAlert('Buch bereits vorhanden!');
+                    return;
+                }
+                const bookDto = convertToBookDto(selectedBook);
+                axios.post('/api/books', bookDto)
+                    .then(response => {
+                        setBooks(prevBooks => [...prevBooks, response.data]);
+                        console.log('Book added: ', books);
+                        setOpenSnackbar(true);
+                        setSelectedBook(null);
+                        fetchDbBooks();
+                    })
+                    .catch(error => {
+                        console.error('Error adding book: ', error);
+                    });
+            }
         }
-        setOpenSnackbar(false);
-    }
+
+        function handleScannerToggle() {
+            setIsScannerActive(!isScannerActive)
+        }
+
+        function handleCloseSnackbar(_?: React.SyntheticEvent | Event, reason?: string) {
+            if (reason === 'clickaway') {
+                return;
+            }
+            setOpenSnackbar(false);
+        }
 
 
-    return (
-        <>
-        <div className={"header-title--wrapper"}>
-            <h1 className={"header-title"}>Neues Buch hinzufügen</h1>
-        </div>
-            <NewBookSearchbar  />
-            <div>
-                <h2>Buch über ISBN suchen</h2>
-                <button onClick={handleScannerToggle}>
-                    {isScannerActive ? "Barcode Scanner stoppen" : "Barcode Scanner starten"}
-                </button>
-            </div>
-            {isScannerActive && (
-                <BarcodeScanner
-                    qrCodeSuccessCallback={onNewScanResult}
-                    qrCodeErrorCallback={error => console.error(error)}
-                    fps={10}
-                    qrbox={250}
-                    disableFlip={false}
-                />
-            )}
+        return (
+            <>
+                <div className={"header-title--wrapper"}>
+                    <h1 className={"header-title"}>Neues Buch hinzufügen</h1>
+                </div>
+                <NewBookSearchbar/>
+                <div>
+                    <h2>Buch über ISBN suchen</h2>
+                    <button onClick={handleScannerToggle}>
+                        {isScannerActive ? "Barcode Scanner stoppen" : "Barcode Scanner starten"}
+                    </button>
+                </div>
+                {isScannerActive && (
+                    <BarcodeScanner
+                        qrCodeSuccessCallback={onNewScanResult}
+                        qrCodeErrorCallback={error => console.error(error)}
+                        fps={10}
+                        qrbox={250}
+                        disableFlip={false}
+                    />
+                )}
                 {selectedBook && (
                     <div className={"selected-book-wrapper"}>
                         <img className={"book-img"} src={selectedBook.volumeInfo.imageLinks?.thumbnail}
@@ -171,19 +171,19 @@ export default function AddNewBookPage() {
 
                     </div>
                 )}
-            <Snackbar open={openSnackbar}
-                      autoHideDuration={3000}
-                      onClose={handleCloseSnackbar}
-                      anchorOrigin={{vertical: 'top', horizontal: 'right'}}>
-                <Alert onClose={handleCloseSnackbar} severity="success" sx={{width: '100%'}}>
-                    Buch erfolgreich hinzugefügt!
-                </Alert>
-            </Snackbar>
-            {alert && (
-                <Alert severity="warning" onClose={() => setAlert("")}>
-                    {alert}
-                </Alert>
-            )}
+                <Snackbar open={openSnackbar}
+                          autoHideDuration={3000}
+                          onClose={handleCloseSnackbar}
+                          anchorOrigin={{vertical: 'top', horizontal: 'right'}}>
+                    <Alert onClose={handleCloseSnackbar} severity="success" sx={{width: '100%'}}>
+                        Buch erfolgreich hinzugefügt!
+                    </Alert>
+                </Snackbar>
+                {alert && (
+                    <Alert severity="warning" onClose={() => setAlert("")}>
+                        {alert}
+                    </Alert>
+                )}
             </>
-            )
+        )
 }
