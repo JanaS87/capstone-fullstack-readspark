@@ -6,26 +6,24 @@ import axios from "axios";
 import {GoogleBook} from "../../types/GoogleBook.ts";
 import Checkboxes from "../Checkboxes/Checkboxes.tsx";
 import {Alert, Snackbar} from "@mui/material";
+import {CombinedBook} from "../../types/CombinedBook.ts";
 
-interface BookDto {
-    title: string,
-    author: string,
-    genre: string,
-    publisher: string,
-    isbn: string,
-    favorite: boolean,
-    read: boolean,
-    blurb: string,
+type AddNewBookPageProps = {
+    isRead: boolean,
+    isFavorite: boolean,
+    setIsRead: (isRead: boolean) => void,
+    setIsFavorite: (isFavorite: boolean) => void,
+    convertToBookDto: (googleBook: GoogleBook, isFavorite:boolean, isRead:boolean) => CombinedBook,
+    fetchDbBooks: () => Promise<CombinedBook[]>,
 }
 
 
-export default function AddNewBookPage() {
+export default function AddNewBookPage({isFavorite, isRead, convertToBookDto, fetchDbBooks, setIsRead, setIsFavorite}: Readonly<AddNewBookPageProps>) {
     const [isScannerActive, setIsScannerActive] = useState(false)
     const [selectedBook, setSelectedBook] = useState<GoogleBook | null>(null)
     const [alert, setAlert] = useState<string>("");
    // const [dbBooks, setDbBooks] = useState<BookDto[]>([]);
-    const [isRead, setIsRead] = useState(false);
-    const [isFavorite, setIsFavorite] = useState(false);
+
     const [books, setBooks] = useState<GoogleBook[]>([]);
     const [openSnackbar, setOpenSnackbar] = useState(false);
 
@@ -37,18 +35,7 @@ export default function AddNewBookPage() {
 
     };
 
-    function convertToBookDto(googleBook: GoogleBook) : BookDto{
-        return {
-            title: googleBook.volumeInfo.title || "",
-            author: googleBook.volumeInfo.authors ? googleBook.volumeInfo.authors.join(", ") : "",
-            genre: googleBook.volumeInfo.categories ? googleBook.volumeInfo.categories.join(", ") : "",
-            publisher: googleBook.volumeInfo.publisher || "",
-            isbn: googleBook.volumeInfo.industryIdentifiers ? googleBook.volumeInfo.industryIdentifiers[0].identifier : "",
-            favorite: isFavorite,
-            read: isRead,
-            blurb: googleBook.volumeInfo.description || ""
-        }
-    }
+
 
     async function fetchBookByIsbn(isbn: string) {
         await axios.get(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`)
@@ -67,19 +54,6 @@ export default function AddNewBookPage() {
 
     }
 
-        async function fetchDbBooks(): Promise<BookDto[]> {
-            await axios.get('/api/books')
-                .then(response => {
-                return(response.data);
-                })
-                .catch(error => {
-                    console.error('Error fetching Books: ', error);
-                    console.error('Error Details: ', error.response);
-                });
-            return [];
-        }
-
-
         async function handleAddSearchedBook(isbn: string) {
             const book = await fetchBookByIsbn(isbn);
         console.log(book);
@@ -93,7 +67,7 @@ export default function AddNewBookPage() {
                     setAlert('Buch bereits vorhanden!');
                     return;
                 }
-                const bookDto = convertToBookDto(selectedBook);
+                const bookDto = convertToBookDto(selectedBook, isFavorite, isRead);
                 axios.post('/api/books', bookDto)
                     .then(response => {
                         setBooks(prevBooks => [...prevBooks, response.data]);

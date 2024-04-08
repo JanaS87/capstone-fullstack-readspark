@@ -8,10 +8,40 @@ import Navbar from "./components/navbar/Navbar.tsx";
 import AddNewBookPage from "./components/AddNewBook/AddNewBookPage.tsx";
 import {CombinedBook} from "./types/CombinedBook.ts";
 import FavoriteBooksPage from "./components/FavoritesPage/FavoriteBooksPage.tsx";
+import {GoogleBook} from "./types/GoogleBook.ts";
+
+interface BookDto {
+    title: string,
+    author: string,
+    genre: string,
+    publisher: string,
+    isbn: string,
+    favorite: boolean,
+    read: boolean,
+    blurb: string,
+}
+
+    function convertToBookDto(googleBook: GoogleBook, isFavorite:boolean, isRead:boolean) : BookDto{
+    return {
+        title: googleBook.volumeInfo.title || "",
+        author: googleBook.volumeInfo.authors ? googleBook.volumeInfo.authors.join(", ") : "",
+        genre: googleBook.volumeInfo.categories ? googleBook.volumeInfo.categories.join(", ") : "",
+        publisher: googleBook.volumeInfo.publisher || "",
+        isbn: googleBook.volumeInfo.industryIdentifiers ? googleBook.volumeInfo.industryIdentifiers[0].identifier : "",
+        favorite: isFavorite,
+        read: isRead,
+        blurb: googleBook.volumeInfo.description || ""
+    }
+}
+
 
 export default function App() {
     const [books, setBooks] = useState<CombinedBook[]>([])
     const [favorites, setFavorites] = useState<CombinedBook[]>([])
+    const [isRead, setIsRead] = useState<boolean>(false);
+    const [isFavorite, setIsFavorite] = useState<boolean>(false);
+
+
 
     useEffect(() => {
         fetchBooks();
@@ -55,12 +85,24 @@ export default function App() {
             });
     }
 
+    async function fetchDbBooks(): Promise<BookDto[]> {
+        await axios.get('/api/books')
+            .then(response => {
+                return(response.data);
+            })
+            .catch(error => {
+                console.error('Error fetching Books: ', error);
+                console.error('Error Details: ', error.response);
+            });
+        return [];
+    }
+
   return (
       <>
           <Routes>
                 <Route path={"/"} element={<BookOverview books={books} fetchBooks={fetchBooks}/>}/>
                 <Route path={"/books/:id"} element={<BookDetailPage />}/>
-                <Route path={"/add"} element={<AddNewBookPage />}/>
+                <Route path={"/add"} element={<AddNewBookPage convertToBookDto={convertToBookDto} isFavorite={isFavorite} isRead={isRead} setIsFavorite={setFavorites} setIsRead={setIsRead} fetchDbBooks={fetchDbBooks}/>}/>
                 <Route path={"/favorites"} element={<FavoriteBooksPage favorites={favorites} fetchFavoriteBooks={fetchFavoriteBooks}/>}/>
           </Routes>
           <Navbar fetchBooks={fetchBooks} fetchFavoriteBooks={fetchFavoriteBooks}/>
