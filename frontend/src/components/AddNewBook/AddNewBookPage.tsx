@@ -4,9 +4,10 @@ import {Html5QrcodeResult} from "html5-qrcode";
 import React, {useState} from "react";
 import axios from "axios";
 import {GoogleBook} from "../../types/GoogleBook.ts";
-import Checkboxes from "../Checkboxes/Checkboxes.tsx";
 import {Alert, Snackbar} from "@mui/material";
 import {BookDto} from "../../types/BookDto.ts";
+import BookDetails from "../BookDetails/BookDetails.tsx";
+import BookCheckboxes from "../BookCheckboxes/BookCheckboxes.tsx";
 
 type AddNewBookPageProps = {
     isRead: boolean,
@@ -22,7 +23,6 @@ export default function AddNewBookPage({isFavorite, isRead, convertToBookDto, fe
     const [isScannerActive, setIsScannerActive] = useState(false)
     const [selectedBook, setSelectedBook] = useState<GoogleBook | null>(null)
     const [alert, setAlert] = useState<string>("");
-   // const [dbBooks, setDbBooks] = useState<BookDto[]>([]);
 
     const [books, setBooks] = useState<GoogleBook[]>([]);
     const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -126,37 +126,18 @@ export default function AddNewBookPage({isFavorite, isRead, convertToBookDto, fe
                     />
                 )}
                 {selectedBook && (
-                    <div className={"selected-book-wrapper"}>
-                        <img className={"book-img"} src={selectedBook.volumeInfo.imageLinks?.thumbnail}
-                             alt={selectedBook.volumeInfo.title}/>
-                        <div className={"information-wrapper"}>
-                            <p className={"information-title"}><span>Titel:</span> {selectedBook.volumeInfo.title}</p>
-                            <p className={"information-author"}><span>Autor:</span> {selectedBook.volumeInfo.authors?.join(", ")}</p>
-                            <p className={"information-publisher"}><span>Verlag:</span> {selectedBook.volumeInfo.publisher}</p>
-                            <p className={"information-category"}><span>Genre:</span> {selectedBook.volumeInfo.categories?.join(", ")}</p>
-                            <p className={"description-text"}>
-                                <span>Beschreibung:</span> {selectedBook.volumeInfo.description}
-                            </p>
-                        </div>
-                        <div className={"checkbox-wrapper"}>
-                            <Checkboxes
-                                checked={isRead}
-                                onChange={(e) => setIsRead(e.target.checked)}
-                                label={"Gelesen"}
-                            />
-                            <Checkboxes
-                                checked={isFavorite}
-                                onChange={(e) => setIsFavorite(e.target.checked)}
-                                label={"Favorit"}
-                            />
-                        </div>
+                    <>
+                        <BookDetails selectedBook={selectedBook}/>
+                        <BookCheckboxes isRead={isRead} setIsRead={setIsRead} isFavorite={isFavorite} setIsFavorite={setIsFavorite} />
                         <div className={"btn-wrapper"}>
-                        <button className={"btn-primary"} aria-label={"add"} onClick={() =>
-                            handleAddSearchedBook(selectedBook.volumeInfo.industryIdentifiers[0].identifier)}>Buch hinzufügen</button>
-                        <button className={"btn-secondary"} aria-label={"cancel"} onClick={handleCancel}>Abbrechen</button>
+                            <button className={"btn-primary"} aria-label={"add"}
+                                    onClick={() => handleAddSearchedBook(selectedBook.volumeInfo.industryIdentifiers[0].identifier)}>Buch
+                                hinzufügen
+                            </button>
+                            <button className={"btn-secondary"} aria-label={"cancel"} onClick={handleCancel}>Abbrechen
+                            </button>
                         </div>
-
-                    </div>
+                    </>
                 )}
                 <Snackbar open={openSnackbar}
                           autoHideDuration={3000}

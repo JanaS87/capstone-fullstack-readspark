@@ -2,9 +2,10 @@ import axios from 'axios';
 import React, {ChangeEvent, useEffect, useState} from "react";
 import {Alert, Autocomplete, Button, CircularProgress, Snackbar, TextField} from "@mui/material";
 import {GoogleBook} from "../../types/GoogleBook";
-import Checkboxes from "../Checkboxes/Checkboxes.tsx";
 import "./NewBookSearchbar.css";
 import {BookDto} from "../../types/BookDto.ts";
+import BookDetails from "../BookDetails/BookDetails.tsx";
+import BookCheckboxes from "../BookCheckboxes/BookCheckboxes.tsx";
 
 
 type NewBookSearchbarProps = {
@@ -147,34 +148,19 @@ export default function NewBookSearchbar({convertToBookDto, fetchDbBooks, isFavo
 
            />
             {selectedBook && (
-                <div className={"selected-book-wrapper"}>
-                    <img className={"book-img"} src={selectedBook.volumeInfo.imageLinks?.thumbnail}
-                         alt={selectedBook.volumeInfo.title}/>
-                    <div className={"information-wrapper"}>
-                        <p className={"information-title"}><span>Titel:</span> {selectedBook.volumeInfo.title}</p>
-                        <p className={"information-author"}><span>Autor:</span> {selectedBook.volumeInfo.authors.join(", ")}</p>
-                        <p className={"information-publisher"}><span>Verlag:</span> {selectedBook.volumeInfo.publisher}</p>
-                        <p className={"information-category"}><span>Genre:</span> {selectedBook.volumeInfo.categories.join(", ")}</p>
-                        <p className={"description-text"}>
-                            <span>Beschreibung:</span> {selectedBook.volumeInfo.description}
-                        </p>
-                    </div>
-                    <div className={"checkbox-wrapper"}>
-                        <Checkboxes
-                            checked={isRead}
-                            onChange={(e) => setIsRead(e.target.checked)}
-                            label={"Gelesen"}
-                        />
-                        <Checkboxes
-                            checked={isFavorite}
-                            onChange={(e) => setIsFavorite(e.target.checked)}
-                            label={"Favorit"}
-                        />
-                    </div>
-                    <Button className={"btn-primary"} aria-label={"add"} variant={"contained"} style={{backgroundColor: "#423F3E", color: "white"}}
-                            onClick={handleAddNewBook}>Buch hinzufügen</Button>
-
-                </div>
+                <><BookDetails
+                    selectedBook={selectedBook}
+                />
+                    <BookCheckboxes
+                        isRead={isRead}
+                        setIsRead={setIsRead}
+                        isFavorite={isFavorite}
+                        setIsFavorite={setIsFavorite}/>
+                    <Button
+                    className={"btn-primary"} aria-label={"add"} variant={"contained"}
+                    style={{backgroundColor: "#423F3E", color: "white"}}
+                    onClick={handleAddNewBook}>Buch hinzufügen</Button>
+                </>
             )}
 
             <Snackbar open={openSnackbar}
