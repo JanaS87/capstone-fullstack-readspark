@@ -92,12 +92,30 @@ export default function App() {
   return (
       <>
           <Routes>
-                <Route path={"/"} element={<BookOverview books={books} fetchBooks={fetchBooks}/>}/>
+                <Route path={"/"} element={<BookOverview
+                    books={books}
+                    fetchBooks={fetchBooks}
+                />}
+                />
                 <Route path={"/books/:id"} element={<BookDetailPage />}/>
-                <Route path={"/add"} element={<AddNewBookPage convertToBookDto={convertToBookDto} isFavorite={isFavorite} isRead={isRead} setIsFavorite={setIsFavorite} setIsRead={setIsRead} fetchDbBooks={fetchDbBooks}/>}/>
-                <Route path={"/favorites"} element={<FavoriteBooksPage favorites={favorites} fetchFavoriteBooks={fetchFavoriteBooks}/>}/>
+                <Route path={"/add"} element={<AddNewBookPage
+                    convertToBookDto={convertToBookDto}
+                    isFavorite={isFavorite}
+                    isRead={isRead}
+                    setIsFavorite={setIsFavorite}
+                    setIsRead={setIsRead}
+                    fetchDbBooks={fetchDbBooks}
+                />}
+                />
+                <Route path={"/favorites"} element={<FavoriteBooksPage
+                    favorites={favorites}
+                    fetchFavoriteBooks={fetchFavoriteBooks}
+                />}
+                />
           </Routes>
-          <Navbar fetchBooks={fetchBooks} fetchFavoriteBooks={fetchFavoriteBooks}/>
+          <Navbar fetchBooks={fetchBooks}
+                  fetchFavoriteBooks={fetchFavoriteBooks}
+          />
       </>
 
   )

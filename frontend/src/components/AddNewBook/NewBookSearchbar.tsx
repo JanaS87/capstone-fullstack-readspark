@@ -4,6 +4,8 @@ import {Alert, Autocomplete, Button, CircularProgress, Snackbar, TextField} from
 import {GoogleBook} from "../../types/GoogleBook";
 import Checkboxes from "../Checkboxes/Checkboxes.tsx";
 import "./NewBookSearchbar.css";
+import {BookDto} from "../../types/BookDto.ts";
+
 
 type NewBookSearchbarProps = {
     convertToBookDto: (googleBook: GoogleBook, isFavorite:boolean, isRead:boolean, ) => BookDto,
@@ -12,18 +14,6 @@ type NewBookSearchbarProps = {
     setIsFavorite: React.Dispatch<React.SetStateAction<boolean>>,
     isRead: boolean,
     setIsRead: React.Dispatch<React.SetStateAction<boolean>>,
-}
-
-
-interface BookDto {
-    title: string,
-    author: string,
-    genre: string,
-    publisher: string,
-    isbn: string,
-    favorite: boolean,
-    read: boolean,
-    blurb: string,
 }
 
 async  function fetchSearchedBooks(searchTerm: string){
