@@ -8,8 +8,6 @@ type BookOverviewProps = {
 }
 export default function BookOverview(props: Readonly<BookOverviewProps>) {
 
-    console.log("books in BookOverview: ", props.books);
-
     return (
         <div className={"book-container"} >
             <h1 className={"header-title"}>Übersicht</h1>

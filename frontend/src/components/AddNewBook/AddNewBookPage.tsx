@@ -170,9 +170,11 @@ export default function AddNewBookPage() {
                                 label={"Favorit"}
                             />
                         </div>
+                        <div className={"btn-wrapper"}>
                         <button className={"btn-primary"} aria-label={"add"} onClick={() =>
                             handleAddSearchedBook(selectedBook.volumeInfo.industryIdentifiers[0].identifier)}>Buch hinzufügen</button>
                         <button className={"btn-secondary"} aria-label={"cancel"} onClick={handleCancel}>Abbrechen</button>
+                        </div>
 
                     </div>
                 )}
