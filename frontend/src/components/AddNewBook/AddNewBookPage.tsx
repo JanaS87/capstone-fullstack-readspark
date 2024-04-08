@@ -6,15 +6,15 @@ import axios from "axios";
 import {GoogleBook} from "../../types/GoogleBook.ts";
 import Checkboxes from "../Checkboxes/Checkboxes.tsx";
 import {Alert, Snackbar} from "@mui/material";
-import {CombinedBook} from "../../types/CombinedBook.ts";
+import {BookDto} from "../../types/BookDto.ts";
 
 type AddNewBookPageProps = {
     isRead: boolean,
     isFavorite: boolean,
-    setIsRead: (isRead: boolean) => void,
-    setIsFavorite: (isFavorite: boolean) => void,
-    convertToBookDto: (googleBook: GoogleBook, isFavorite:boolean, isRead:boolean) => CombinedBook,
-    fetchDbBooks: () => Promise<CombinedBook[]>,
+    setIsRead: React.Dispatch<React.SetStateAction<boolean>>,
+    setIsFavorite: React.Dispatch<React.SetStateAction<boolean>>,
+    convertToBookDto: (googleBook: GoogleBook, isFavorite:boolean, isRead:boolean) => BookDto,
+    fetchDbBooks: () => Promise<BookDto[]>,
 }
 
 
@@ -103,7 +103,13 @@ export default function AddNewBookPage({isFavorite, isRead, convertToBookDto, fe
                 <div className={"header-title--wrapper"}>
                     <h1 className={"header-title"}>Neues Buch hinzufügen</h1>
                 </div>
-                <NewBookSearchbar/>
+                <NewBookSearchbar
+                    convertToBookDto={convertToBookDto}
+                    fetchDbBooks={fetchDbBooks}
+                isFavorite={isFavorite}
+                setIsFavorite={setIsFavorite}
+                isRead={isRead}
+                setIsRead={setIsRead}/>
                 <div>
                     <h2>Buch über ISBN suchen</h2>
                     <button onClick={handleScannerToggle}>

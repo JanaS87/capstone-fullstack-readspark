@@ -9,17 +9,9 @@ import AddNewBookPage from "./components/AddNewBook/AddNewBookPage.tsx";
 import {CombinedBook} from "./types/CombinedBook.ts";
 import FavoriteBooksPage from "./components/FavoritesPage/FavoriteBooksPage.tsx";
 import {GoogleBook} from "./types/GoogleBook.ts";
+import {BookDto} from "./types/BookDto.ts";
 
-interface BookDto {
-    title: string,
-    author: string,
-    genre: string,
-    publisher: string,
-    isbn: string,
-    favorite: boolean,
-    read: boolean,
-    blurb: string,
-}
+
 
     function convertToBookDto(googleBook: GoogleBook, isFavorite:boolean, isRead:boolean) : BookDto{
     return {
@@ -38,8 +30,8 @@ interface BookDto {
 export default function App() {
     const [books, setBooks] = useState<CombinedBook[]>([])
     const [favorites, setFavorites] = useState<CombinedBook[]>([])
-    const [isRead, setIsRead] = useState<boolean>(false);
-    const [isFavorite, setIsFavorite] = useState<boolean>(false);
+    const [isRead, setIsRead] = useState(false);
+    const [isFavorite, setIsFavorite] = useState(false);
 
 
 
@@ -102,7 +94,7 @@ export default function App() {
           <Routes>
                 <Route path={"/"} element={<BookOverview books={books} fetchBooks={fetchBooks}/>}/>
                 <Route path={"/books/:id"} element={<BookDetailPage />}/>
-                <Route path={"/add"} element={<AddNewBookPage convertToBookDto={convertToBookDto} isFavorite={isFavorite} isRead={isRead} setIsFavorite={setFavorites} setIsRead={setIsRead} fetchDbBooks={fetchDbBooks}/>}/>
+                <Route path={"/add"} element={<AddNewBookPage convertToBookDto={convertToBookDto} isFavorite={isFavorite} isRead={isRead} setIsFavorite={setIsFavorite} setIsRead={setIsRead} fetchDbBooks={fetchDbBooks}/>}/>
                 <Route path={"/favorites"} element={<FavoriteBooksPage favorites={favorites} fetchFavoriteBooks={fetchFavoriteBooks}/>}/>
           </Routes>
           <Navbar fetchBooks={fetchBooks} fetchFavoriteBooks={fetchFavoriteBooks}/>
