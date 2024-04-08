@@ -119,6 +119,10 @@ export default function AddNewBookPage() {
             setOpenSnackbar(false);
         }
 
+        function handleCancel() {
+            setSelectedBook(null);
+        }
+
 
         return (
             <>
@@ -168,6 +172,7 @@ export default function AddNewBookPage() {
                         </div>
                         <button className={"btn-primary"} aria-label={"add"} onClick={() =>
                             handleAddSearchedBook(selectedBook.volumeInfo.industryIdentifiers[0].identifier)}>Buch hinzufügen</button>
+                        <button className={"btn-secondary"} aria-label={"cancel"} onClick={handleCancel}>Abbrechen</button>
 
                     </div>
                 )}
