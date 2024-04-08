@@ -2,19 +2,19 @@ import axios from 'axios';
 import React, {ChangeEvent, useEffect, useState} from "react";
 import {Alert, Autocomplete, Button, CircularProgress, Snackbar, TextField} from "@mui/material";
 import {GoogleBook} from "../../types/GoogleBook";
-import Checkboxes from "../Checkboxes/Checkboxes.tsx";
 import "./NewBookSearchbar.css";
+import {BookDto} from "../../types/BookDto.ts";
+import BookDetails from "../BookDetails/BookDetails.tsx";
+import BookCheckboxes from "../BookCheckboxes/BookCheckboxes.tsx";
 
 
-interface BookDto {
-    title: string,
-    author: string,
-    genre: string,
-    publisher: string,
-    isbn: string,
-    favorite: boolean,
-    read: boolean,
-    blurb: string,
+type NewBookSearchbarProps = {
+    convertToBookDto: (googleBook: GoogleBook, isFavorite:boolean, isRead:boolean, ) => BookDto,
+    fetchDbBooks: () => Promise<BookDto[]>,
+    isFavorite: boolean,
+    setIsFavorite: React.Dispatch<React.SetStateAction<boolean>>,
+    isRead: boolean,
+    setIsRead: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
 async  function fetchSearchedBooks(searchTerm: string){
@@ -30,7 +30,7 @@ async  function fetchSearchedBooks(searchTerm: string){
     return [];
 }
 
-export default function NewBookSearchbar() {
+export default function NewBookSearchbar({convertToBookDto, fetchDbBooks, isFavorite, setIsFavorite, isRead, setIsRead}: Readonly<NewBookSearchbarProps>) {
     const [selectedBook, setSelectedBook] = useState<GoogleBook | null>(null)
     const [searchTerm, setSearchTerm] = useState("")
     const [open, setOpen] = useState(false)
@@ -40,8 +40,6 @@ export default function NewBookSearchbar() {
     const [timer, setTimer] = useState<number>();
     const [alert, setAlert] = useState<string>("");
     const [dbBooks, setDbBooks] = useState<BookDto[]>([]);
-    const [isRead, setIsRead] = useState(false);
-    const [isFavorite, setIsFavorite] = useState(false);
     const loading = open && options.length === 0;
 
 
@@ -70,32 +68,7 @@ export default function NewBookSearchbar() {
         }
     }, [open]);
 
-
-    function convertToBookDto(googleBook: GoogleBook) : BookDto{
-        return {
-            title: googleBook.volumeInfo.title || "",
-            author: googleBook.volumeInfo.authors ? googleBook.volumeInfo.authors.join(", ") : "",
-            genre: googleBook.volumeInfo.categories ? googleBook.volumeInfo.categories.join(", ") : "",
-            publisher: googleBook.volumeInfo.publisher || "",
-            isbn: googleBook.volumeInfo.industryIdentifiers ? googleBook.volumeInfo.industryIdentifiers[0].identifier : "",
-            favorite: isFavorite,
-            read: isRead,
-            blurb: googleBook.volumeInfo.description || ""
-        }
-    }
-
-   async function fetchDbBooks(): Promise<BookDto[]> {
-       await axios.get('/api/books')
-            .then(response => {
-                setDbBooks(response.data);
-                return response.data;
-            })
-            .catch(error => {
-                console.error('Error fetching Books: ', error);
-                console.error('Error Details: ', error.response);
-            });
-       return [];
-    }
+    fetchDbBooks().then(r => setDbBooks(r));
 
    async function handleAddNewBook() {
         if (selectedBook) {
@@ -105,7 +78,7 @@ export default function NewBookSearchbar() {
                 setAlert('Buch bereits vorhanden!');
                 return;
             }
-            const bookDto = convertToBookDto(selectedBook);
+            const bookDto = convertToBookDto(selectedBook, isFavorite, isRead);
             axios.post('/api/books', bookDto)
                 .then(response => {
                     setBooks(prevBooks => [...prevBooks, response.data]);
@@ -175,34 +148,19 @@ export default function NewBookSearchbar() {
 
            />
             {selectedBook && (
-                <div className={"selected-book-wrapper"}>
-                    <img className={"book-img"} src={selectedBook.volumeInfo.imageLinks?.thumbnail}
-                         alt={selectedBook.volumeInfo.title}/>
-                    <div className={"information-wrapper"}>
-                        <p className={"information-title"}><span>Titel:</span> {selectedBook.volumeInfo.title}</p>
-                        <p className={"information-author"}><span>Autor:</span> {selectedBook.volumeInfo.authors.join(", ")}</p>
-                        <p className={"information-publisher"}><span>Verlag:</span> {selectedBook.volumeInfo.publisher}</p>
-                        <p className={"information-category"}><span>Genre:</span> {selectedBook.volumeInfo.categories.join(", ")}</p>
-                        <p className={"description-text"}>
-                            <span>Beschreibung:</span> {selectedBook.volumeInfo.description}
-                        </p>
-                    </div>
-                    <div className={"checkbox-wrapper"}>
-                        <Checkboxes
-                            checked={isRead}
-                            onChange={(e) => setIsRead(e.target.checked)}
-                            label={"Gelesen"}
-                        />
-                        <Checkboxes
-                            checked={isFavorite}
-                            onChange={(e) => setIsFavorite(e.target.checked)}
-                            label={"Favorit"}
-                        />
-                    </div>
-                    <Button className={"btn-primary"} aria-label={"add"} variant={"contained"} style={{backgroundColor: "#423F3E", color: "white"}}
-                            onClick={handleAddNewBook}>Buch hinzufügen</Button>
-
-                </div>
+                <><BookDetails
+                    selectedBook={selectedBook}
+                />
+                    <BookCheckboxes
+                        isRead={isRead}
+                        setIsRead={setIsRead}
+                        isFavorite={isFavorite}
+                        setIsFavorite={setIsFavorite}/>
+                    <Button
+                    className={"btn-primary"} aria-label={"add"} variant={"contained"}
+                    style={{backgroundColor: "#423F3E", color: "white"}}
+                    onClick={handleAddNewBook}>Buch hinzufügen</Button>
+                </>
             )}
 
             <Snackbar open={openSnackbar}

@@ -1,15 +1,17 @@
 package org.schmaelzle.backend.controller;
 
 
+
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import static org.hamcrest.Matchers.emptyString;
@@ -29,24 +31,31 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     @Autowired
     private MockMvc mvc;
 
-    private MockWebServer mockWebServer;
+    private static MockWebServer mockWebServer;
 
-    @BeforeEach
-    public void setUp() throws IOException {
+    @BeforeAll
+    static void setUp() throws IOException {
         mockWebServer = new MockWebServer();
         mockWebServer.start();
     }
 
-    @AfterEach
-    public void tearDown() throws IOException {
+    @AfterAll
+    static void tearDown() throws IOException {
         mockWebServer.shutdown();
     }
+
+    @DynamicPropertySource
+    static void backendProperties(DynamicPropertyRegistry registry) {
+        registry.add("google.books.api.url", () -> mockWebServer.url("/").toString());
+    }
+
 
     @Test
     void testSearchBooks() throws Exception {
 
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(200)
+                        .addHeader("Content-Type", "application/json")
                 .setBody("""
                         {
                             "kind": "books#volumes",
@@ -78,5 +87,46 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
                 .andExpect(jsonPath("$.items[0].volumeInfo.categories[0]", is(not(emptyString()))))
                 .andExpect(jsonPath("$.items[0].volumeInfo.publisher", is("Carlsen Verlag GmbH")))
                 .andExpect(jsonPath("$.items[0].volumeInfo.industryIdentifiers[0].identifier", is(not(emptyString()))));
+    }
+
+    @Test
+    void testSearchBooksByBarcode() throws Exception {
+
+        mockWebServer.enqueue(new MockResponse()
+                .setResponseCode(200)
+                .addHeader("Content-Type", "application/json")
+                .setBody("""
+                        {
+                            "kind": "books#volumes",
+                            "totalItems": 1,
+                            "items": [
+                                {
+                                    "kind": "books#volume",
+                                    "volumeInfo": {
+                                        "title": "Die Magie der Scheibenwelt",
+                                        "authors": ["Terry Pratchett"],
+                                        "categories": ["Fantasy"],
+                                        "publisher": "Piper",
+                                        "industryIdentifiers": [
+                                            {
+                                                "type": "ISBN_13",
+                                                "identifier": "9783492285193"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                        """));
+
+        mvc.perform(MockMvcRequestBuilders.post("/api/google/books/find-by-barcode")
+                .contentType("text/plain")
+                .content("39076002631195"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items[0].volumeInfo.title", is("Die Magie der Scheibenwelt")))
+                .andExpect(jsonPath("$.items[0].volumeInfo.authors[0]", is(not(emptyString()))))
+                .andExpect(jsonPath("$.items[0].volumeInfo.categories[0]", is(not(emptyString()))))
+                .andExpect(jsonPath("$.items[0].volumeInfo.publisher", is("Piper")))
+                .andExpect(jsonPath("$.items[0].volumeInfo.industryIdentifiers[0].identifier", is("9783492285193")));
     }
 }
