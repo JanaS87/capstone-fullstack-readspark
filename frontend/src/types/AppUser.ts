@@ -3,4 +3,6 @@ export type AppUser = {
     username: string;
     avatarUrl: string;
     favoriteBookIds: string[];
+    readBookIds: string[];
+    bookIds: string[];
 }

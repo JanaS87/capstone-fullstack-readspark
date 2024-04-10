@@ -1,6 +1,7 @@
 package org.schmaelzle.backend.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.schmaelzle.backend.google.GoogleBook;
 import org.schmaelzle.backend.google.GoogleBookResponse;
 import org.schmaelzle.backend.model.AppUser;
 import org.schmaelzle.backend.service.AppUserService;
@@ -33,7 +34,7 @@ public class AppUserController {
     }
 
     @GetMapping("/books")
-    public List<GoogleBookResponse> getBooks(@AuthenticationPrincipal OAuth2User user) {
+    public List<GoogleBook> getBooks(@AuthenticationPrincipal OAuth2User user) {
         return userService.getBooks(user.getAttributes().get("id").toString());
     }
 
@@ -48,12 +49,12 @@ public class AppUserController {
     }
 
     @GetMapping("/books/favorites")
-    public List<GoogleBookResponse> getFavoriteBooks(@AuthenticationPrincipal OAuth2User user) {
+    public List<GoogleBook> getFavoriteBooks(@AuthenticationPrincipal OAuth2User user) {
         return userService.getFavoriteBooks(user.getAttributes().get("id").toString());
     }
 
     @GetMapping("/books/read")
-    public List<GoogleBookResponse> getReadBooks(@AuthenticationPrincipal OAuth2User user) {
+    public List<GoogleBook> getReadBooks(@AuthenticationPrincipal OAuth2User user) {
         return userService.getReadBooks(user.getAttributes().get("id").toString());
     }
 

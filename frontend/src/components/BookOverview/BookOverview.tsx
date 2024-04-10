@@ -1,10 +1,9 @@
-import {CombinedBook} from "../../types/CombinedBook.ts";
+
 import BookCard from "../BookCard/BookCard.tsx";
 import "./BookOverview.css";
-
+import {GoogleBook} from "../../types/GoogleBook.ts";
 type BookOverviewProps = {
-    books: CombinedBook[],
-    fetchBooks: () => void
+    books: GoogleBook[];
 }
 export default function BookOverview(props: Readonly<BookOverviewProps>) {
 

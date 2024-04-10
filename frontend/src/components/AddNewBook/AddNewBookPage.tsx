@@ -5,26 +5,17 @@ import React, {useState} from "react";
 import axios from "axios";
 import {GoogleBook} from "../../types/GoogleBook.ts";
 import {Alert, Snackbar} from "@mui/material";
-import {BookDto} from "../../types/BookDto.ts";
 import BookDetails from "../BookDetails/BookDetails.tsx";
-import BookCheckboxes from "../BookCheckboxes/BookCheckboxes.tsx";
 
 type AddNewBookPageProps = {
-    isRead: boolean,
-    isFavorite: boolean,
-    setIsRead: React.Dispatch<React.SetStateAction<boolean>>,
-    setIsFavorite: React.Dispatch<React.SetStateAction<boolean>>,
-    convertToBookDto: (googleBook: GoogleBook, isFavorite:boolean, isRead:boolean) => BookDto,
-    fetchDbBooks: () => Promise<BookDto[]>,
+    addBook: (id: string) => void;
 }
 
 
-export default function AddNewBookPage({isFavorite, isRead, convertToBookDto, fetchDbBooks, setIsRead, setIsFavorite}: Readonly<AddNewBookPageProps>) {
+export default function AddNewBookPage(props: Readonly<AddNewBookPageProps>) {
     const [isScannerActive, setIsScannerActive] = useState(false)
     const [selectedBook, setSelectedBook] = useState<GoogleBook | null>(null)
     const [alert, setAlert] = useState<string>("");
-
-    const [books, setBooks] = useState<GoogleBook[]>([]);
     const [openSnackbar, setOpenSnackbar] = useState(false);
 
     const onNewScanResult = async (decodedText: string, decodedResult: Html5QrcodeResult) => {
@@ -54,33 +45,7 @@ export default function AddNewBookPage({isFavorite, isRead, convertToBookDto, fe
 
     }
 
-        async function handleAddSearchedBook(isbn: string) {
-            const book = await fetchBookByIsbn(isbn);
-        console.log(book);
-        if(selectedBook) {
-                const fetchedDbBooks = await fetchDbBooks();
-                const bookExists = fetchedDbBooks.find((dbBook) =>
-                dbBook.isbn === selectedBook.volumeInfo.industryIdentifiers[0].identifier ||
-            dbBook.title === selectedBook.volumeInfo.title ||
-                    dbBook.author === selectedBook.volumeInfo.authors.join(", "));
-                if (bookExists) {
-                    setAlert('Buch bereits vorhanden!');
-                    return;
-                }
-                const bookDto = convertToBookDto(selectedBook, isFavorite, isRead);
-                axios.post('/api/books', bookDto)
-                    .then(response => {
-                        setBooks(prevBooks => [...prevBooks, response.data]);
-                        console.log('Book added: ', books);
-                        setOpenSnackbar(true);
-                        setSelectedBook(null);
-                        fetchDbBooks();
-                    })
-                    .catch(error => {
-                        console.error('Error adding book: ', error);
-                    });
-            }
-        }
+
 
         function handleScannerToggle() {
             setIsScannerActive(!isScannerActive)
@@ -103,13 +68,7 @@ export default function AddNewBookPage({isFavorite, isRead, convertToBookDto, fe
                 <div className={"header-title--wrapper"}>
                     <h1 className={"header-title"}>Neues Buch hinzufügen</h1>
                 </div>
-                <NewBookSearchbar
-                    convertToBookDto={convertToBookDto}
-                    fetchDbBooks={fetchDbBooks}
-                isFavorite={isFavorite}
-                setIsFavorite={setIsFavorite}
-                isRead={isRead}
-                setIsRead={setIsRead}/>
+                <NewBookSearchbar addBook={props.addBook}/>
                 <div>
                     <h2>Buch über ISBN suchen</h2>
                     <button onClick={handleScannerToggle}>
@@ -128,12 +87,8 @@ export default function AddNewBookPage({isFavorite, isRead, convertToBookDto, fe
                 {selectedBook && (
                     <>
                         <BookDetails selectedBook={selectedBook}/>
-                        <BookCheckboxes isRead={isRead} setIsRead={setIsRead} isFavorite={isFavorite} setIsFavorite={setIsFavorite} />
                         <div className={"btn-wrapper"}>
-                            <button className={"btn-primary"} aria-label={"add"}
-                                    onClick={() => handleAddSearchedBook(selectedBook.volumeInfo.industryIdentifiers[0].identifier)}>Buch
-                                hinzufügen
-                            </button>
+                            <button className={"btn-primary"} aria-label={"add"}>Buch hinzufügen</button>
                             <button className={"btn-secondary"} aria-label={"cancel"} onClick={handleCancel}>Abbrechen
                             </button>
                         </div>

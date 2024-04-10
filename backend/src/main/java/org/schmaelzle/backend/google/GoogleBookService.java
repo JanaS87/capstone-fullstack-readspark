@@ -7,6 +7,7 @@ import org.springframework.web.client.RestClient;
 public class GoogleBookService {
 
     private final RestClient restClient;
+
     public GoogleBookService( @Value("${google.books.api.url}")String googleBooksUrl) {
         this.restClient = RestClient.builder().baseUrl(googleBooksUrl).build();
     }
@@ -36,13 +37,11 @@ public class GoogleBookService {
                 .getBody();
     }
 
-    public GoogleBookResponse getById(String id) {
+    public GoogleBook getById(String id) {
         return restClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path(id)
-                        .build())
+                .uri("/" + id)
                 .retrieve()
-                .toEntity(GoogleBookResponse.class)
+                .toEntity(GoogleBook.class)
                 .getBody();
     }
 }

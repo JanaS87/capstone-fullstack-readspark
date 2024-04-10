@@ -1,6 +1,7 @@
 package org.schmaelzle.backend.service;
 
 import lombok.RequiredArgsConstructor;
+import org.schmaelzle.backend.google.GoogleBook;
 import org.schmaelzle.backend.google.GoogleBookResponse;
 import org.schmaelzle.backend.google.GoogleBookService;
 import org.schmaelzle.backend.model.AppUser;
@@ -38,27 +39,27 @@ public class AppUserService {
         return userRepository.save(user);
     }
 
-    public List<GoogleBookResponse> getFavoriteBooks(String userId) {
+    public List<GoogleBook> getFavoriteBooks(String userId) {
         AppUser user = getAppUserById(userId);
-        List<GoogleBookResponse> favoriteBooks = new ArrayList<>();
+        List<GoogleBook> favoriteBooks = new ArrayList<>();
         for (String bookId : user.getFavoriteBookIds()) {
             favoriteBooks.add(googleBookService.getById(bookId));
         }
         return favoriteBooks;
     }
 
-    public List<GoogleBookResponse> getBooks(String userId) {
+    public List<GoogleBook> getBooks(String userId) {
         AppUser user = getAppUserById(userId);
-        List<GoogleBookResponse> books = new ArrayList<>();
+        List<GoogleBook> books = new ArrayList<>();
         for (String bookId : user.getBookIds()) {
             books.add(googleBookService.getById(bookId));
         }
         return books;
     }
 
-    public List<GoogleBookResponse> getReadBooks(String userId) {
+    public List<GoogleBook> getReadBooks(String userId) {
         AppUser user = getAppUserById(userId);
-        List<GoogleBookResponse> readBooks = new ArrayList<>();
+        List<GoogleBook> readBooks = new ArrayList<>();
         for (String bookId : user.getReadBookIds()) {
             readBooks.add(googleBookService.getById(bookId));
         }

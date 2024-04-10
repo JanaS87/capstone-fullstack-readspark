@@ -3,18 +3,10 @@ import React, {ChangeEvent, useEffect, useState} from "react";
 import {Alert, Autocomplete, Button, CircularProgress, Snackbar, TextField} from "@mui/material";
 import {GoogleBook} from "../../types/GoogleBook";
 import "./NewBookSearchbar.css";
-import {BookDto} from "../../types/BookDto.ts";
 import BookDetails from "../BookDetails/BookDetails.tsx";
-import BookCheckboxes from "../BookCheckboxes/BookCheckboxes.tsx";
-
 
 type NewBookSearchbarProps = {
-    convertToBookDto: (googleBook: GoogleBook, isFavorite:boolean, isRead:boolean, ) => BookDto,
-    fetchDbBooks: () => Promise<BookDto[]>,
-    isFavorite: boolean,
-    setIsFavorite: React.Dispatch<React.SetStateAction<boolean>>,
-    isRead: boolean,
-    setIsRead: React.Dispatch<React.SetStateAction<boolean>>,
+    addBook: (id: string) => void;
 }
 
 async  function fetchSearchedBooks(searchTerm: string){
@@ -30,16 +22,14 @@ async  function fetchSearchedBooks(searchTerm: string){
     return [];
 }
 
-export default function NewBookSearchbar({convertToBookDto, fetchDbBooks, isFavorite, setIsFavorite, isRead, setIsRead}: Readonly<NewBookSearchbarProps>) {
+export default function NewBookSearchbar(props: Readonly<NewBookSearchbarProps>) {
     const [selectedBook, setSelectedBook] = useState<GoogleBook | null>(null)
     const [searchTerm, setSearchTerm] = useState("")
     const [open, setOpen] = useState(false)
     const [options, setOptions] = useState<GoogleBook[]>([]);
-    const [books, setBooks] = useState<GoogleBook[]>([]);
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [timer, setTimer] = useState<number>();
     const [alert, setAlert] = useState<string>("");
-    const [dbBooks, setDbBooks] = useState<BookDto[]>([]);
     const loading = open && options.length === 0;
 
 
@@ -60,6 +50,7 @@ export default function NewBookSearchbar({convertToBookDto, fetchDbBooks, isFavo
         return () => {
             active = false;
         }
+        // eslint-disable-next-line
     }, [loading, searchTerm]);
 
     useEffect(() => {
@@ -68,29 +59,10 @@ export default function NewBookSearchbar({convertToBookDto, fetchDbBooks, isFavo
         }
     }, [open]);
 
-    fetchDbBooks().then(r => setDbBooks(r));
 
-   async function handleAddNewBook() {
+ function handleAddNewBook() {
         if (selectedBook) {
-            await fetchDbBooks();
-            const bookExists = dbBooks.find(book => book.isbn === selectedBook.volumeInfo.industryIdentifiers[0].identifier);
-            if (bookExists) {
-                setAlert('Buch bereits vorhanden!');
-                return;
-            }
-            const bookDto = convertToBookDto(selectedBook, isFavorite, isRead);
-            axios.post('/api/books', bookDto)
-                .then(response => {
-                    setBooks(prevBooks => [...prevBooks, response.data]);
-                    console.log('Book added: ', books);
-                    setOpenSnackbar(true);
-                    setSelectedBook(null);
-                    setSearchTerm("");
-                    fetchDbBooks();
-                })
-                .catch(error => {
-                    console.error('Error adding book: ', error);
-                });
+            props.addBook(selectedBook.id);
         }
     }
 
@@ -151,11 +123,6 @@ export default function NewBookSearchbar({convertToBookDto, fetchDbBooks, isFavo
                 <><BookDetails
                     selectedBook={selectedBook}
                 />
-                    <BookCheckboxes
-                        isRead={isRead}
-                        setIsRead={setIsRead}
-                        isFavorite={isFavorite}
-                        setIsFavorite={setIsFavorite}/>
                     <Button
                     className={"btn-primary"} aria-label={"add"} variant={"contained"}
                     style={{backgroundColor: "#423F3E", color: "white"}}
