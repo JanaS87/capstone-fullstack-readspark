@@ -10,6 +10,9 @@ import {CombinedBook} from "./types/CombinedBook.ts";
 import FavoriteBooksPage from "./components/FavoritesPage/FavoriteBooksPage.tsx";
 import {GoogleBook} from "./types/GoogleBook.ts";
 import {BookDto} from "./types/BookDto.ts";
+import useAppUser from "./utils/useAppUser.ts";
+import LoginPage from "./components/LoginPage/LoginPage.tsx";
+import ProtectedRoutes from "./components/ProtectedRoutes/ProtectedRoutes.tsx";
 
 
 
@@ -32,7 +35,7 @@ export default function App() {
     const [favorites, setFavorites] = useState<CombinedBook[]>([])
     const [isRead, setIsRead] = useState(false);
     const [isFavorite, setIsFavorite] = useState(false);
-
+    const {appUser, login, logout} = useAppUser();
 
 
     useEffect(() => {
@@ -89,23 +92,13 @@ export default function App() {
         return [];
     }
 
-    function login() {
-        const host = window.location.host === "localhost:5173" ? "http://localhost:8080" : window.location.origin
-        window.location.href = host + "/oauth2/authorization/github";
-    }
-
-    const loadUser = () => {
-        axios.get("/api/auth/me")
-            .then(response => {
-                console.log(response.data)
-            })
-    }
 
   return (
       <>
-          <button onClick={login}>Login</button>
-            <button onClick={loadUser}>Me</button>
+          {appUser ? <h1>Welcome back, {appUser.username}</h1> : <h1>Not logged in</h1>}
           <Routes>
+              <Route path={"/login"} element={<LoginPage login={login}/>}/>
+              <Route element={<ProtectedRoutes user={appUser}/>}>
                 <Route path={"/"} element={<BookOverview
                     books={books}
                     fetchBooks={fetchBooks}
@@ -126,6 +119,7 @@ export default function App() {
                     fetchFavoriteBooks={fetchFavoriteBooks}
                 />}
                 />
+              </Route>
           </Routes>
           <Navbar fetchBooks={fetchBooks}
                   fetchFavoriteBooks={fetchFavoriteBooks}

@@ -16,4 +16,6 @@ public class AppUser {
     private String username;
     private String avatarUrl;
     private List<String> favoriteBookIds;
+    private List<String> bookIds;
+    private List<String> readBookIds;
 }

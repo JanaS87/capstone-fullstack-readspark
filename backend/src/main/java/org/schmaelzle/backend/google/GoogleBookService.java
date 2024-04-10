@@ -35,4 +35,14 @@ public class GoogleBookService {
                 .toEntity(GoogleBookResponse.class)
                 .getBody();
     }
+
+    public GoogleBookResponse getById(String id) {
+        return restClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path(id)
+                        .build())
+                .retrieve()
+                .toEntity(GoogleBookResponse.class)
+                .getBody();
+    }
 }

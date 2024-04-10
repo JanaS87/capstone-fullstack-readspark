@@ -35,7 +35,7 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(a -> a
-                        .requestMatchers("/api/auth/me").authenticated()
+                        .requestMatchers("/api/users/me").authenticated()
                         .anyRequest().permitAll()
                 )
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
@@ -57,6 +57,8 @@ public class SecurityConfig {
                 AppUser newUser = new AppUser(user.getAttributes().get("id").toString(),
                         user.getAttributes().get("login").toString(),
                         user.getAttributes().get("avatar_url").toString(),
+                        new ArrayList<>(),
+                        new ArrayList<>(),
                         new ArrayList<>());
                 userRepository.save(newUser);
                 return user;
