@@ -18,18 +18,15 @@ export default function AddNewBookPage(props: Readonly<AddNewBookPageProps>) {
     const [alert, setAlert] = useState<string>("");
     const [openSnackbar, setOpenSnackbar] = useState(false);
 
-    const onNewScanResult = async (decodedText: string, decodedResult: Html5QrcodeResult) => {
+    const onNewScanResult =  (decodedText: string, decodedResult: Html5QrcodeResult) => {
         console.log(`Scan result:`, decodedText)
         console.log(`Scan result:`, decodedResult)
-        await fetchBookByIsbn(decodedText);
+         fetchBookByIsbn(decodedText);
         setIsScannerActive(false);
-
     };
 
-
-
-    async function fetchBookByIsbn(isbn: string) {
-        await axios.get(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`)
+     function fetchBookByIsbn(isbn: string) {
+         axios.get(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`)
             .then(response => {
                 if  (response.data.items && response.data.items.length > 0) {
                     setSelectedBook(response.data.items[0]);
@@ -41,11 +38,17 @@ export default function AddNewBookPage(props: Readonly<AddNewBookPageProps>) {
             })
             .catch(error => {
                 console.error('Error fetching Books: ', error);
-            });
+            })
+             .finally(() => handleScannerToggle());
 
     }
 
-
+    function addNewBook() {
+        if (selectedBook) {
+            props.addBook(selectedBook.id);
+            setOpenSnackbar(true);
+        }
+    }
 
         function handleScannerToggle() {
             setIsScannerActive(!isScannerActive)
@@ -88,7 +91,7 @@ export default function AddNewBookPage(props: Readonly<AddNewBookPageProps>) {
                     <>
                         <BookDetails selectedBook={selectedBook}/>
                         <div className={"btn-wrapper"}>
-                            <button className={"btn-primary"} aria-label={"add"}>Buch hinzufügen</button>
+                            <button className={"btn-primary"} onClick={addNewBook} aria-label={"add"}>Buch hinzufügen</button>
                             <button className={"btn-secondary"} aria-label={"cancel"} onClick={handleCancel}>Abbrechen
                             </button>
                         </div>
