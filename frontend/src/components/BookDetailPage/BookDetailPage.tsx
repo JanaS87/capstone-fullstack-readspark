@@ -16,15 +16,15 @@ type BookDetailPageProps = {
     removeFavorite: (id: string) => void,
     removeReadBook: (id: string) => void,
 
-
 }
 
 export default function BookDetailPage(props: Readonly<BookDetailPageProps>) {
     const [book, setBook] = useState<GoogleBook>()
     const [bookImage, setBookImage] = useState<string | null>(null)
     const [open, setOpen] = useState(false);
+    const [read, setRead] = useState(false);
+    const [favorite, setFavorite] = useState(false);
     const {id} = useParams<{id: string}>();
-
 
     // fetchBookByIsbn wird aufgerufen, wenn die Komponente gerendert wird
     useEffect(() => {
@@ -49,8 +49,6 @@ export default function BookDetailPage(props: Readonly<BookDetailPageProps>) {
             .catch(error => {
                 console.error('Error fetching Books: ', error);
             })
-
-
     }
 
 
@@ -75,17 +73,28 @@ export default function BookDetailPage(props: Readonly<BookDetailPageProps>) {
                 <Dialog open={open} onClose={handleClickDialogClose}>
                     <DialogTitle>Info aktualisieren</DialogTitle>
                     <DialogContent>
-                        <Checkboxes checked={read} onChange={(event) => setRead(event.target.checked)} label={"Gelesen"}/>
-                        <Checkboxes checked={favorite} onChange={(event) => setFavorite(event.target.checked)} label={"Favorit"}/>
+                        <Checkboxes
+                            checked={read}
+                            handleOnClick={() => {setRead(!read);}}
+                            label={"Gelesen"}/>
+                        <Checkboxes
+                            checked={favorite}
+                            handleOnClick={() => {setFavorite(!favorite);}}
+                            label={"Favorit"}/>
                     </DialogContent>
                     <DialogActions>
                         <button onClick={handleClickDialogClose}>Abbrechen</button>
+
                         <button onClick={() => {
                             if(book?.id){
-                            updateBook({...book, read, favorite});
+                            props.updateBook({...book, read, favorite});
                             handleClickDialogClose();
                         }}}>Speichern</button>
-                        <button onClick={deleteBook}>Löschen</button>
+
+                        <button onClick={() => {
+                            if(book?.id) {
+                            props.removeBook(book.id)}}}>Löschen</button>
+
                     </DialogActions>
                 </Dialog>*
             </div>

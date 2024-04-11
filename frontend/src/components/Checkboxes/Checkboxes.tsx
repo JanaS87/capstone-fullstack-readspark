@@ -1,22 +1,21 @@
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
-import React from "react";
 
 type CheckBoxProps = {
     checked: boolean,
-    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
-    label: string
+    label: string,
+    handleOnClick: () => void
 }
 
-export default function Checkboxes({checked, onChange, label}: Readonly<CheckBoxProps>) {
+export default function Checkboxes({checked, label, handleOnClick}: Readonly<CheckBoxProps>) {
     return (
         <FormGroup>
             <FormControlLabel control={
                 <Checkbox
                     checked={checked}
-                    onChange={onChange}
                     color= "primary"
+                    onClick={handleOnClick}
                 />
             }
                               label={label}
