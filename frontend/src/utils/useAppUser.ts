@@ -105,7 +105,6 @@ export default function useAppUser() {
             });
     }
 
-
     return {
         appUser,
         login,
@@ -118,6 +117,7 @@ export default function useAppUser() {
         removeBook,
         favoriteBooks,
         readBooks,
-        books
+        books,
+        fetchBooks,
     }
 }
