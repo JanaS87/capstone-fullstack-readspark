@@ -7,12 +7,11 @@ import {GoogleBook} from "../../types/GoogleBook.ts";
 import axios from "axios";
 
 type BookDetailPageProps = {
-    book: GoogleBook,
     removeBook: (id: string) => void,
 }
 
 export default function BookDetailPage(props: Readonly<BookDetailPageProps>) {
-    const [book, setBook] = useState<GoogleBook | null>(null)
+    const [book, setBook] = useState<GoogleBook>()
     const [bookImage, setBookImage] = useState<string | null>(null)
     // const [open, setOpen] = useState(false);
     const {id} = useParams<{id: string}>();

@@ -2,7 +2,6 @@ package org.schmaelzle.backend.service;
 
 import lombok.RequiredArgsConstructor;
 import org.schmaelzle.backend.google.GoogleBook;
-import org.schmaelzle.backend.google.GoogleBookResponse;
 import org.schmaelzle.backend.google.GoogleBookService;
 import org.schmaelzle.backend.model.AppUser;
 import org.schmaelzle.backend.repository.AppUserRepository;
@@ -29,12 +28,18 @@ public class AppUserService {
 
     public AppUser addBookToUserFavorites(String userId, String bookId) {
         AppUser user = getAppUserById(userId);
+        if(user.getFavoriteBookIds().contains(bookId)) {
+            throw new IllegalArgumentException("Book already in user's favorites");
+        }
         user.getFavoriteBookIds().add(bookId);
         return userRepository.save(user);
     }
 
     public AppUser removeBookFromUserFavorites(String userId, String bookId) {
         AppUser user = getAppUserById(userId);
+        if(!user.getFavoriteBookIds().contains(bookId)) {
+            throw new IllegalArgumentException("Book not exist");
+        }
         user.getFavoriteBookIds().remove(bookId);
         return userRepository.save(user);
     }
@@ -68,24 +73,37 @@ public class AppUserService {
 
     public AppUser addBookToUserBooks(String userId, String bookId) {
         AppUser user = getAppUserById(userId);
-        user.getBookIds().add(bookId);
-        return userRepository.save(user);
+        if(user.getBookIds().contains(bookId)) {
+            throw new IllegalArgumentException("Book already in user's books");
+        }
+            user.getBookIds().add(bookId);
+            return userRepository.save(user);
+
     }
 
     public AppUser addBookToUserReadBooks(String userId, String bookId) {
         AppUser user = getAppUserById(userId);
+        if(user.getReadBookIds().contains(bookId)) {
+            throw new IllegalArgumentException("Book already in user's read books");
+        }
         user.getReadBookIds().add(bookId);
         return userRepository.save(user);
     }
 
     public AppUser removeBookFromUserBooks(String userId, String bookId) {
         AppUser user = getAppUserById(userId);
-        user.getBookIds().remove(bookId);
-        return userRepository.save(user);
+        if(!user.getBookIds().contains(bookId)) {
+            throw new IllegalArgumentException("Book not exist");
+        }
+            user.getBookIds().remove(bookId);
+            return userRepository.save(user);
     }
 
     public AppUser removeBookFromUserReadBooks(String userId, String bookId) {
         AppUser user = getAppUserById(userId);
+        if(!user.getReadBookIds().contains(bookId)) {
+            throw new IllegalArgumentException("Book not exist");
+        }
         user.getReadBookIds().remove(bookId);
         return userRepository.save(user);
     }

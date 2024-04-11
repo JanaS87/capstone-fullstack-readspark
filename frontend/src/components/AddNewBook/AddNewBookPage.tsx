@@ -8,7 +8,7 @@ import {Alert, Snackbar} from "@mui/material";
 import BookDetails from "../BookDetails/BookDetails.tsx";
 
 type AddNewBookPageProps = {
-    addBook: (id: string) => void;
+    addBook: (id: string) => void,
 }
 
 
@@ -24,6 +24,7 @@ export default function AddNewBookPage(props: Readonly<AddNewBookPageProps>) {
          fetchBookByIsbn(decodedText);
         setIsScannerActive(false);
     };
+
 
      function fetchBookByIsbn(isbn: string) {
          axios.get(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`)

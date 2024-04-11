@@ -47,10 +47,15 @@ export default function useAppUser() {
     function addBook(id: string) {
         axios.post(`/api/users/books/${id}`)
             .then(() => {
+
                 fetchBooks();
                 fetchMe();
-            });
 
+            })
+            .catch(() => {
+                alert('Buch gibt es bereits!')
+                console.error('Error adding book')
+            });
     }
 
     function removeBook(id: string) {
@@ -58,6 +63,10 @@ export default function useAppUser() {
             .then(() => {
                 fetchBooks();
                 fetchMe();
+            })
+            .catch(() => {
+                alert('Buch nicht gefunden!')
+                console.error('Error removing book')
             });
     }
 
@@ -72,6 +81,10 @@ export default function useAppUser() {
             .then(() => {
                 fetchFavorites();
                 fetchMe();
+            })
+            .catch(() => {
+                alert('Buch bereits in Favoriten!')
+                console.error('Error adding favorite')
             });
     }
 
@@ -80,6 +93,10 @@ export default function useAppUser() {
             .then(() => {
                 fetchFavorites();
                 fetchMe();
+            })
+            .catch(() => {
+                alert('Buch nicht in Favoriten!')
+                console.error('Error removing favorite')
             });
     }
 
@@ -94,6 +111,10 @@ export default function useAppUser() {
             .then(() => {
                 fetchReadBooks();
                 fetchMe();
+            })
+            .catch(() => {
+                alert('Buch bereits gelesen!')
+                console.error('Error adding read book')
             });
     }
 
@@ -102,6 +123,10 @@ export default function useAppUser() {
             .then(() => {
                 fetchReadBooks();
                 fetchMe();
+            })
+            .catch(() => {
+                alert('Buch nicht gefunden!')
+                console.error('Error removing read book')
             });
     }
 

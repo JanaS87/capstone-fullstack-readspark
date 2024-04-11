@@ -2,9 +2,9 @@ package org.schmaelzle.backend.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.schmaelzle.backend.google.GoogleBook;
-import org.schmaelzle.backend.google.GoogleBookResponse;
 import org.schmaelzle.backend.model.AppUser;
 import org.schmaelzle.backend.service.AppUserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
@@ -68,5 +68,10 @@ public class AppUserController {
         return userService.removeBookFromUserReadBooks(user.getAttributes().get("id").toString(), bookId);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String handleIllegalArgument(IllegalArgumentException e) {
+        return e.getMessage();
+    }
 
 }
