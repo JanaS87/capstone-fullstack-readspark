@@ -2,18 +2,27 @@ import {useEffect, useState} from "react";
 import {Link, useParams} from "react-router-dom";
 import "./BookDetailPage.css";
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-
+import CreateIcon from '@mui/icons-material/Create';
 import {GoogleBook} from "../../types/GoogleBook.ts";
 import axios from "axios";
+import {Dialog, DialogActions, DialogContent, DialogTitle} from "@mui/material";
+import Checkboxes from "../Checkboxes/Checkboxes.tsx";
 
 type BookDetailPageProps = {
     removeBook: (id: string) => void,
+    updateBook: (book: GoogleBook) => void,
+    addReadBook: (id: string) => void,
+    addFavorite: (id: string) => void,
+    removeFavorite: (id: string) => void,
+    removeReadBook: (id: string) => void,
+
+
 }
 
 export default function BookDetailPage(props: Readonly<BookDetailPageProps>) {
     const [book, setBook] = useState<GoogleBook>()
     const [bookImage, setBookImage] = useState<string | null>(null)
-    // const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(false);
     const {id} = useParams<{id: string}>();
 
 
@@ -46,13 +55,13 @@ export default function BookDetailPage(props: Readonly<BookDetailPageProps>) {
 
 
 
- /*   function handleClickDialogOpen() {
+  function handleClickDialogOpen() {
         setOpen(true);
     }
 
     function handleClickDialogClose() {
         setOpen(false);
-    }*/
+    }
 
     return (
         <>
@@ -61,9 +70,9 @@ export default function BookDetailPage(props: Readonly<BookDetailPageProps>) {
             <Link className={"back-link"} to={'/'}><ArrowBackIosIcon/> Übersicht</Link>
                     {/*{book?.read ? <img src={"/book-filled.svg"} className={"read-icon-filled"} alt={"a filled book"}/> : <img src={"/book-outlined.svg"} className={"read-icon-outlined"} alt={"an outlined book"}/> }*/}
                     {/*{book?.favorite ? <FavoriteIcon className={"favorite-icon"}/> : <FavoriteBorderIcon className={"favorite-icon"}/> }*/}
-               {/*<CreateIcon className={"edit-icon"} onClick={handleClickDialogOpen} />*/}
+              <CreateIcon className={"edit-icon"} onClick={handleClickDialogOpen} />
                 </div>
-                {/*<Dialog open={open} onClose={handleClickDialogClose}>
+                <Dialog open={open} onClose={handleClickDialogClose}>
                     <DialogTitle>Info aktualisieren</DialogTitle>
                     <DialogContent>
                         <Checkboxes checked={read} onChange={(event) => setRead(event.target.checked)} label={"Gelesen"}/>
@@ -78,7 +87,7 @@ export default function BookDetailPage(props: Readonly<BookDetailPageProps>) {
                         }}}>Speichern</button>
                         <button onClick={deleteBook}>Löschen</button>
                     </DialogActions>
-                </Dialog>*/}
+                </Dialog>*
             </div>
                 {book && (
                 <div className={"book-details-wrapper"}>

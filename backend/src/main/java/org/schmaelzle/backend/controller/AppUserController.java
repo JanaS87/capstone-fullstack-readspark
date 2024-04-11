@@ -68,10 +68,17 @@ public class AppUserController {
         return userService.removeBookFromUserReadBooks(user.getAttributes().get("id").toString(), bookId);
     }
 
+    @PutMapping("/books/{bookId}")
+    public AppUser updateBook(@AuthenticationPrincipal OAuth2User user, @PathVariable String bookId, @RequestParam boolean isFavorite, @RequestParam boolean isRead) {
+        return userService.updateBook(user.getAttributes().get("id").toString(), bookId, isFavorite, isRead);
+    }
+
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String handleIllegalArgument(IllegalArgumentException e) {
         return e.getMessage();
     }
+
+
 
 }

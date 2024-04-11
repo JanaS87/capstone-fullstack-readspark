@@ -130,6 +130,19 @@ export default function useAppUser() {
             });
     }
 
+    function updateBook(book: GoogleBook) {
+        axios.put(`/api/users/books/${book.id}`, book)
+            .then(() => {
+                fetchBooks();
+                fetchFavorites();
+                fetchReadBooks();
+            })
+            .catch(() => {
+                alert('Buch nicht gefunden!')
+                console.error('Error updating book')
+            });
+    }
+
     return {
         appUser,
         login,
@@ -143,6 +156,6 @@ export default function useAppUser() {
         favoriteBooks,
         readBooks,
         books,
-        fetchBooks,
+        updateBook
     }
 }

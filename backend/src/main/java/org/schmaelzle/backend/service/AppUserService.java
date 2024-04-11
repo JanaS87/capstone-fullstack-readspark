@@ -107,4 +107,27 @@ public class AppUserService {
         user.getReadBookIds().remove(bookId);
         return userRepository.save(user);
     }
+
+    public AppUser updateBook(String userId, String bookId, boolean isFavorite, boolean isRead) {
+        AppUser user = getAppUserById(userId);
+        if(isFavorite) {
+            if(user.getFavoriteBookIds().contains(bookId)) {
+                throw new IllegalArgumentException("Book already in user's favorites");
+            }
+            user.getFavoriteBookIds().add(bookId);
+        } else {
+            user.getFavoriteBookIds().remove(bookId);
+        }
+        if(isRead) {
+            if(user.getReadBookIds().contains(bookId)) {
+                throw new IllegalArgumentException("Book already in user's read books");
+            }
+            user.getReadBookIds().add(bookId);
+        } else {
+            user.getReadBookIds().remove(bookId);
+        }
+        return userRepository.save(user);
+    }
+
+
 }
