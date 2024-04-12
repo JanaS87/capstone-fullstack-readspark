@@ -24,7 +24,7 @@ export default function BookCard(props: Readonly<BookCardProps>) {
                     <h2 className={"BookTitle"}>{props.book.volumeInfo.title}</h2>
                     <h3 className={"BookAuthor"}>{props.book.volumeInfo.authors}</h3>
                 </div>
-                <div>
+                <div className={"icon-wrapper"}>
                     {isRead && <FontAwesomeIcon icon={faBookOpen} style={{color: "#000",}}/>}
                     {isFavorite && <FontAwesomeIcon icon={faHeart} style={{color: "#000",}}/>}
                 </div>
