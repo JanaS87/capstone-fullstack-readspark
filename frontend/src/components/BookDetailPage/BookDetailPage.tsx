@@ -8,6 +8,7 @@ import { IconButton} from "@mui/material";
 import {AppUser} from "../../types/AppUser.ts";
 import {faBook, faBookOpen, faHeart, faTrash} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import BookDetails from "../BookDetails/BookDetails.tsx";
 
 type BookDetailPageProps = {
     removeBook: (id: string) => void,
@@ -16,13 +17,10 @@ type BookDetailPageProps = {
     removeReadBook: (id: string) => void,
     addFavoriteBook: (id: string) => void,
     removeFavoriteBook: (id: string) => void,
-
-
 }
 
 export default function BookDetailPage(props: Readonly<BookDetailPageProps>) {
-    const [book, setBook] = useState<GoogleBook>()
-    const [bookImage, setBookImage] = useState<string | null>(null)
+    const [book, setBook] = useState<GoogleBook>();
     const [read, setRead] = useState(book ? props.appUser.readBookIds.includes(book.id) : false);
     const [favorite, setFavorite] = useState(book ? props.appUser.favoriteBookIds.includes(book.id) : false);
     const {id} = useParams<{ id: string }>();
@@ -43,7 +41,6 @@ export default function BookDetailPage(props: Readonly<BookDetailPageProps>) {
                 if (response.data.volumeInfo) {
                     const book = (response.data);
                     setBook(book);
-                    setBookImage(book.volumeInfo.imageLinks.thumbnail)
                     setRead(props.appUser.readBookIds.includes(book.id))
                     setFavorite(props.appUser.favoriteBookIds.includes(book.id))
                 } else {
@@ -105,16 +102,7 @@ export default function BookDetailPage(props: Readonly<BookDetailPageProps>) {
                 </div>
             </div>
             {book && (
-                <div className={"book-details-wrapper"}>
-                    {bookImage && <img src={bookImage} alt={"Buchcover"}/>}
-                    <div className={"book-details"}>
-                        <h2 className={"header-md"}>{book.volumeInfo.title}</h2>
-                        <h3 className={"header-sm"}>{book.volumeInfo.authors}</h3>
-                        <p>{book.volumeInfo.publisher}</p>
-                        <p>{book.volumeInfo.categories}</p>
-                        <p className={"book-details--description"}>{book.volumeInfo.description}</p>
-                    </div>
-                </div>
+                <BookDetails selectedBook={book}/>
             )}
         </>
     )
