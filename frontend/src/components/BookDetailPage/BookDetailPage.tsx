@@ -95,7 +95,7 @@ export default function BookDetailPage(props: Readonly<BookDetailPageProps>) {
                     {favorite ?
                         (<IconButton onClick={handleFavorite} aria-label="favorite"><FontAwesomeIcon icon={faHeart} style={{color: "#000",}} /></IconButton>)
                         :
-                        (<IconButton onClick={handleFavorite} aria-label="favorite"><FontAwesomeIcon icon={faHeart} style={{color: "#000",}} /></IconButton>)}
+                        (<IconButton onClick={handleFavorite} aria-label="favorite"><FontAwesomeIcon icon={faHeart} /></IconButton>)}
                     <IconButton onClick={handleDelete} aria-label="delete"><FontAwesomeIcon icon={faTrash} style={{color: "#000",}} /></IconButton>
                 </div>
             </div>

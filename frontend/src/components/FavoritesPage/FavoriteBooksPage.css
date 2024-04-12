@@ -1,4 +1,4 @@
-.book-container {
+.favorite-book-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
@@ -12,15 +12,6 @@
     justify-content: space-between;
     margin-bottom: 20px;
     width: 100%;
-}
-
-.header-btn-wrapper {
-    display: flex;
-    flex-direction: row;
-    justify-content:  end;
-    margin-bottom: 20px;
-    margin-right: 30px;
-    align-self: center;
 }
 
 .header-title {
