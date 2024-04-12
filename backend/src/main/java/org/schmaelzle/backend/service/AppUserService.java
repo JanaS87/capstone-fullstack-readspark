@@ -18,7 +18,7 @@ public class AppUserService {
     private final AppUserRepository userRepository;
     private final GoogleBookService googleBookService;
 
-    private static final String BOOK_NOT_EXISTING = "Book not existing";
+    private static final String BOOK_NOT_EXISTING = "Book not exist";
 
     public AppUser getLoggedInUser(String id) {
         return getAppUserById(id);
