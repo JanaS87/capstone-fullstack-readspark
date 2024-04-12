@@ -22,7 +22,7 @@ public class AppUserService {
         return getAppUserById(id);
     }
 
-    private AppUser getAppUserById(String id) {
+    AppUser getAppUserById(String id) {
         return userRepository.findById(id).orElseThrow(() -> new NoSuchElementException("User not found"));
     }
 
