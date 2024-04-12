@@ -25,7 +25,6 @@ export default function BookDetailPage(props: Readonly<BookDetailPageProps>) {
     const [favorite, setFavorite] = useState(book ? props.appUser.favoriteBookIds.includes(book.id) : false);
     const {id} = useParams<{ id: string }>();
 
-    // fetchBookByIsbn wird aufgerufen, wenn die Komponente gerendert wird
     useEffect(() => {
         if (id) {
             fetchBookById(id);
@@ -34,7 +33,6 @@ export default function BookDetailPage(props: Readonly<BookDetailPageProps>) {
     }, [id]);
 
 
-    //Buch über die isbn abrufen mit axios
     function fetchBookById(id: string) {
         axios.get(`https://www.googleapis.com/books/v1/volumes/${id}`)
             .then(response => {
