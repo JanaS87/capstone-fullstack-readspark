@@ -119,7 +119,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
                         }
                         """));
 
-        mvc.perform(MockMvcRequestBuilders.post("/api/google/books/find-by-barcode")
+        mvc.perform(MockMvcRequestBuilders.get("/api/google/books/find-by-barcode")
                 .contentType("text/plain")
                 .content("39076002631195"))
                 .andExpect(status().isOk())
