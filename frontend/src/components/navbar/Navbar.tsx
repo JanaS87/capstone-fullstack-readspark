@@ -7,12 +7,7 @@ import PlusIcon from '@mui/icons-material/Add';
 import './Navbar.css'
 import {useNavigate} from "react-router-dom";
 
-type NavbarProps = {
-    fetchBooks: () => void,
-    fetchFavoriteBooks: () => void
-}
-
-export default function Navbar({fetchBooks, fetchFavoriteBooks}: Readonly<NavbarProps>) {
+export default function Navbar() {
     const [value, setValue] = React.useState(0);
     const navigate = useNavigate();
 
@@ -21,14 +16,12 @@ export default function Navbar({fetchBooks, fetchFavoriteBooks}: Readonly<Navbar
 
         switch (newValue) {
             case 0:
-                fetchBooks();
                 navigate('/');
                 break;
             case 1:
                 navigate('/add');
                 break;
             case 2:
-                fetchFavoriteBooks();
                 navigate('/favorites');
                 break;
             default:

@@ -15,7 +15,7 @@ public class GoogleBookController {
          return googleBookService.searchBooks(q);
      }
 
-     @PostMapping("/find-by-barcode")
+     @GetMapping("/find-by-barcode")
         public GoogleBookResponse searchBooksByBarcode(@RequestBody String barcode) {
             return googleBookService.searchBooksByBarcode(barcode);
         }

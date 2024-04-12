@@ -1,127 +1,106 @@
-import {Book} from "../../types/Book.ts";
 import {useEffect, useState} from "react";
-import axios from "axios";
 import {Link, useParams} from "react-router-dom";
 import "./BookDetailPage.css";
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import CreateIcon from '@mui/icons-material/Create';
-import Dialog from '@mui/material/Dialog';
-import {DialogActions, DialogContent, DialogTitle} from "@mui/material";
-import Checkboxes from "../Checkboxes/Checkboxes.tsx";
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import FavoriteIcon from '@mui/icons-material/Favorite';
+import {GoogleBook} from "../../types/GoogleBook.ts";
+import axios from "axios";
+import { IconButton} from "@mui/material";
+import {AppUser} from "../../types/AppUser.ts";
+import {faBook, faBookOpen, faHeart, faTrash} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import BookDetails from "../BookDetails/BookDetails.tsx";
 
+type BookDetailPageProps = {
+    removeBook: (id: string) => void,
+    appUser: AppUser,
+    addReadBook: (id: string) => void,
+    removeReadBook: (id: string) => void,
+    addFavoriteBook: (id: string) => void,
+    removeFavoriteBook: (id: string) => void,
+}
 
-export default function BookDetailPage() {
-    const {id} = useParams<{id: string}>();
-    const [book, setBook] = useState<Book | null>(null)
-    const [bookImage, setBookImage] = useState<string | null>(null)
-    const [open, setOpen] = useState(false);
-    const [read, setRead] = useState(book?.read || false);
-    const [favorite, setFavorite] = useState(book?.favorite || false);
-
+export default function BookDetailPage(props: Readonly<BookDetailPageProps>) {
+    const [book, setBook] = useState<GoogleBook>();
+    const [read, setRead] = useState(book ? props.appUser.readBookIds.includes(book.id) : false);
+    const [favorite, setFavorite] = useState(book ? props.appUser.favoriteBookIds.includes(book.id) : false);
+    const {id} = useParams<{ id: string }>();
 
     useEffect(() => {
-        axios.get(`/api/books/${id}`)
-            .then(response => {
-                setBook(response.data);
-            })
-            .catch(error => {
-                console.error('Error fetching Book: ', error);
-                console.error('Error Details: ', error.response);
-            });
+        if (id) {
+            fetchBookById(id);
+        }
+        // eslint-disable-next-line
     }, [id]);
 
-    useEffect(() => {
-        if (book) {
-            axios.get(`https://www.googleapis.com/books/v1/volumes?q=isbn:${book.isbn}`)
-                .then(response => {
-                   const data = response.data;
-                   const thumbnail = data.items?.[0]?.volumeInfo?.imageLinks?.thumbnail;
-                   if (thumbnail) {
-                       setBookImage(thumbnail);
-                   }
-                })
-                .catch(error => {
-                    console.error('Error fetching Book Image: ', error);
-                    console.error('Error Details: ', error.response);
-                });
-        }
-    }, [book]);
 
-    function handleClickDialogOpen() {
-        if(book) {
-            setRead(book.read);
-            setFavorite(book.favorite);
-        }
-        setOpen(true);
-    }
-
-    function handleClickDialogClose() {
-        setOpen(false);
-    }
-
-    function updateBook(book: Book) {
-        axios.put(`/api/books/${id}`, book)
+    function fetchBookById(id: string) {
+        axios.get(`https://www.googleapis.com/books/v1/volumes/${id}`)
             .then(response => {
-                setBook(response.data);
+                if (response.data.volumeInfo) {
+                    const book = (response.data);
+                    setBook(book);
+                    setRead(props.appUser.readBookIds.includes(book.id))
+                    setFavorite(props.appUser.favoriteBookIds.includes(book.id))
+                } else {
+                    console.error('No book found for Id: ', id);
+                }
             })
             .catch(error => {
-                console.error('Error updating Book: ', error);
-                console.error('Error Details: ', error.response);
-            });
+                console.error('Error fetching Books: ', error);
+            })
     }
 
-    function deleteBook() {
-        if(window.confirm("Buch wirklich löschen?")) {
-            axios.delete(`/api/books/${id}`)
-                .then(() => {
-                    window.location.href = '/';
-                })
-                .catch(error => {
-                    console.error('Error deleting Book: ', error);
-                    console.error('Error Details: ', error.response);
-                });
+    function handleRead() {
+        if (read && book) {
+            props.removeReadBook(book.id)
+            setRead(false)
+        }
+        if (!read && book) {
+            props.addReadBook(book.id)
+            setRead(true)
         }
     }
+
+    function handleFavorite() {
+        if (favorite && book) {
+            props.removeFavoriteBook(book.id)
+            setFavorite(false)
+        }
+        if (!favorite && book) {
+            props.addFavoriteBook(book.id)
+            setFavorite(true)
+        }
+    }
+
+    function handleDelete() {
+        if (book) {
+            props.removeBook(book.id)
+        }
+    }
+
+    if (!book) {
+        return <div>loading...</div>
+    }
+
 
     return (
         <>
             <div className={"link-wrapper"}>
                 <div className={"link-icon-wrapper"}>
-            <Link className={"back-link"} to={'/'}><ArrowBackIosIcon/> Übersicht</Link>
-                    {book?.read ? <img src={"/book-filled.svg"} className={"read-icon-filled"} alt={"a filled book"}/> : <img src={"/book-outlined.svg"} className={"read-icon-outlined"} alt={"an outlined book"}/> }
-                    {book?.favorite ? <FavoriteIcon className={"favorite-icon"}/> : <FavoriteBorderIcon className={"favorite-icon"}/> }
-                <CreateIcon className={"edit-icon"} onClick={handleClickDialogOpen} />
+                    <Link className={"back-link"} to={'/'}><ArrowBackIosIcon/> Übersicht</Link>
+                    {read ?
+                        (<IconButton onClick={handleRead} aria-label="read"><FontAwesomeIcon icon={faBookOpen} style={{color: "#000",}}/></IconButton>)
+                        :
+                        (<IconButton onClick={handleRead} aria-label="read"><FontAwesomeIcon icon={faBook} style={{color: "#000",}} /></IconButton>)}
+                    {favorite ?
+                        (<IconButton onClick={handleFavorite} aria-label="favorite"><FontAwesomeIcon icon={faHeart} style={{color: "#000",}} /></IconButton>)
+                        :
+                        (<IconButton onClick={handleFavorite} aria-label="favorite"><FontAwesomeIcon icon={faHeart} style={{color: "#000",}} /></IconButton>)}
+                    <IconButton onClick={handleDelete} aria-label="delete"><FontAwesomeIcon icon={faTrash} style={{color: "#000",}} /></IconButton>
                 </div>
-                <Dialog open={open} onClose={handleClickDialogClose}>
-                    <DialogTitle>Info aktualisieren</DialogTitle>
-                    <DialogContent>
-                        <Checkboxes checked={read} onChange={(event) => setRead(event.target.checked)} label={"Gelesen"}/>
-                        <Checkboxes checked={favorite} onChange={(event) => setFavorite(event.target.checked)} label={"Favorit"}/>
-                    </DialogContent>
-                    <DialogActions>
-                        <button onClick={handleClickDialogClose}>Abbrechen</button>
-                        <button onClick={() => {
-                            if(book?.id){
-                            updateBook({...book, read, favorite});
-                            handleClickDialogClose();
-                        }}}>Speichern</button>
-                        <button onClick={deleteBook}>Löschen</button>
-                    </DialogActions>
-                </Dialog>
             </div>
-                {book && (
-                <div className={"book-details-wrapper"}>
-                    {bookImage && <img src={bookImage} alt={"Buchcover"}/>}
-                    <div className={"book-details"}>
-                    <h2 className={"header-md"}>{book.title}</h2>
-                    <h3 className={"header-sm"}>{book.author}</h3>
-                    <p>{book.publisher}</p>
-                    <p>{book.genre}</p>
-                    <p className={"book-details--description"}>{book.blurb}</p>
-                    </div>
-                </div>
+            {book && (
+                <BookDetails selectedBook={book}/>
             )}
         </>
     )

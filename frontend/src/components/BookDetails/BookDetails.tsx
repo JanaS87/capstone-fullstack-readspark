@@ -12,9 +12,9 @@ export default function BookDetails({selectedBook}: Readonly<BookDetailsProps>) 
                  alt={selectedBook.volumeInfo.title}/>
             <div className={"information-wrapper"}>
                 <p className={"information-title"}><span>Titel:</span> {selectedBook.volumeInfo.title}</p>
-                <p className={"information-author"}><span>Autor:</span> {selectedBook.volumeInfo.authors.join(", ")}</p>
+                <p className={"information-author"}><span>Autor:</span> {selectedBook.volumeInfo.authors?.join(", ")}</p>
                 <p className={"information-publisher"}><span>Verlag:</span> {selectedBook.volumeInfo.publisher}</p>
-                <p className={"information-category"}><span>Genre:</span> {selectedBook.volumeInfo.categories.join(", ")}</p>
+                <p className={"information-category"}><span>Genre:</span> {selectedBook.volumeInfo.categories?.join(", ")}</p>
                 <p className={"description-text"}>
                     <span>Beschreibung:</span> {selectedBook.volumeInfo.description}
                 </p>
