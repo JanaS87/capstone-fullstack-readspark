@@ -46,8 +46,14 @@ export default function AddNewBookPage(props: Readonly<AddNewBookPageProps>) {
 
     function addNewBook() {
         if (selectedBook) {
-            props.addBook(selectedBook.id);
-            setOpenSnackbar(true);
+            props.addBook(selectedBook.id)
+                .then(r => {
+                    setSelectedBook(null);
+                    setOpenSnackbar(true);
+                    return r;
+                })
+                .catch(() => setAlert('Buch gibt es bereits!')
+                )
         }
     }
 
