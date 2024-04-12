@@ -6,6 +6,7 @@ import AddNewBookPage from "./components/AddNewBook/AddNewBookPage.tsx";
 import useAppUser from "./utils/useAppUser.ts";
 import LoginPage from "./components/LoginPage/LoginPage.tsx";
 import ProtectedRoutes from "./components/ProtectedRoutes/ProtectedRoutes.tsx";
+import FavoriteBooksPage from "./components/FavoritesPage/FavoriteBooksPage.tsx";
 
 
 export default function App() {
@@ -39,11 +40,14 @@ export default function App() {
                       />
                   }
                 <Route path={"/add"} element={<AddNewBookPage addBook={addBook} />}/>
-                {/*<Route path={"/favorites"} element={<FavoriteBooksPage
-                    favorites={favorites}
-                    fetchFavoriteBooks={fetchFavoriteBooks}
-                />}
-                />*/}
+                  {appUser &&
+                      <Route path={"/favorites"} element={<FavoriteBooksPage
+                          appUser={appUser}
+                          books={books}
+                      />
+                      }
+                      />
+                  }
               </Route>
           </Routes>
           <Navbar/>
