@@ -63,6 +63,8 @@ export default function NewBookSearchbar(props: Readonly<NewBookSearchbarProps>)
  function handleAddNewBook() {
         if (selectedBook) {
             props.addBook(selectedBook.id);
+            setSelectedBook(null);
+            setOpenSnackbar(true);
         }
     }
 
