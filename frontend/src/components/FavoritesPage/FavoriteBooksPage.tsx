@@ -16,7 +16,6 @@ export default function FavoriteBooksPage(props: Readonly<FavoriteBooksPageProps
     const favoriteBooks = getFavoriteBooks();
 
     return (
-        <>
             <div className={"favorite-book-wrapper"}>
             <div className={"header-wrapper"}>
             <h1 className={"header-title"}>Favoriten</h1>
@@ -29,7 +28,5 @@ export default function FavoriteBooksPage(props: Readonly<FavoriteBooksPageProps
                     />)}
             </div>
             </div>
-
-        </>
     )
 }
