@@ -44,8 +44,8 @@ export default function useAppUser() {
             .catch(() => setBooks([]));
     }
 
-    function addBook(id: string) {
-        axios.post(`/api/users/books/${id}`)
+  async  function addBook(id: string) {
+      return  axios.post(`/api/users/books/${id}`)
             .then(() => {
 
                 fetchBooks();
@@ -130,18 +130,6 @@ export default function useAppUser() {
             });
     }
 
-    function updateBook(book: GoogleBook) {
-        axios.put(`/api/users/books/${book.id}`, book)
-            .then(() => {
-                fetchBooks();
-                fetchFavorites();
-                fetchReadBooks();
-            })
-            .catch(() => {
-                alert('Buch nicht gefunden!')
-                console.error('Error updating book')
-            });
-    }
 
     return {
         appUser,
@@ -156,6 +144,5 @@ export default function useAppUser() {
         favoriteBooks,
         readBooks,
         books,
-        updateBook
     }
 }

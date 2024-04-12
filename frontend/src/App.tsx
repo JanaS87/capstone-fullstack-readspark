@@ -9,7 +9,7 @@ import ProtectedRoutes from "./components/ProtectedRoutes/ProtectedRoutes.tsx";
 
 
 export default function App() {
-    const {appUser, login, books, addBook,  removeBook} = useAppUser();
+    const {appUser, login, books, addBook,  removeBook, addReadBook, removeReadBook, addFavorite, removeFavorite} = useAppUser();
 
 
   return (
@@ -22,7 +22,19 @@ export default function App() {
                     books={books}
                 />}
                 />
-                <Route path={"/books/:id"} element={<BookDetailPage  removeBook={removeBook} />}/>
+                  {appUser &&
+                      <Route path={"/books/:id"} element={
+                          <BookDetailPage
+                          appUser={appUser}
+                          addReadBook={addReadBook}
+                            removeReadBook={removeReadBook}
+                          removeBook={removeBook}
+                            addFavoriteBook={addFavorite}
+                            removeFavoriteBook={removeFavorite}
+                          />
+                        }
+                      />
+                  }
                 <Route path={"/add"} element={<AddNewBookPage addBook={addBook} />}/>
                 {/*<Route path={"/favorites"} element={<FavoriteBooksPage
                     favorites={favorites}

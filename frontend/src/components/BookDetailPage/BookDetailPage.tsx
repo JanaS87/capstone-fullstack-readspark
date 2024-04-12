@@ -2,35 +2,37 @@ import {useEffect, useState} from "react";
 import {Link, useParams} from "react-router-dom";
 import "./BookDetailPage.css";
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import CreateIcon from '@mui/icons-material/Create';
 import {GoogleBook} from "../../types/GoogleBook.ts";
 import axios from "axios";
-import {Dialog, DialogActions, DialogContent, DialogTitle} from "@mui/material";
-import Checkboxes from "../Checkboxes/Checkboxes.tsx";
+import { IconButton} from "@mui/material";
+import {AppUser} from "../../types/AppUser.ts";
+import {faBook, faBookOpen, faHeart, faTrash} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 type BookDetailPageProps = {
     removeBook: (id: string) => void,
-    updateBook: (book: GoogleBook) => void,
+    appUser: AppUser,
     addReadBook: (id: string) => void,
-    addFavorite: (id: string) => void,
-    removeFavorite: (id: string) => void,
     removeReadBook: (id: string) => void,
+    addFavoriteBook: (id: string) => void,
+    removeFavoriteBook: (id: string) => void,
+
 
 }
 
 export default function BookDetailPage(props: Readonly<BookDetailPageProps>) {
     const [book, setBook] = useState<GoogleBook>()
     const [bookImage, setBookImage] = useState<string | null>(null)
-    const [open, setOpen] = useState(false);
-    const [read, setRead] = useState(false);
-    const [favorite, setFavorite] = useState(false);
-    const {id} = useParams<{id: string}>();
+    const [read, setRead] = useState(book ? props.appUser.readBookIds.includes(book.id) : false);
+    const [favorite, setFavorite] = useState(book ? props.appUser.favoriteBookIds.includes(book.id) : false);
+    const {id} = useParams<{ id: string }>();
 
     // fetchBookByIsbn wird aufgerufen, wenn die Komponente gerendert wird
     useEffect(() => {
         if (id) {
             fetchBookById(id);
         }
+        // eslint-disable-next-line
     }, [id]);
 
 
@@ -41,72 +43,76 @@ export default function BookDetailPage(props: Readonly<BookDetailPageProps>) {
                 if (response.data.volumeInfo) {
                     const book = (response.data);
                     setBook(book);
-                   setBookImage(book.volumeInfo.imageLinks.thumbnail)
+                    setBookImage(book.volumeInfo.imageLinks.thumbnail)
+                    setRead(props.appUser.readBookIds.includes(book.id))
+                    setFavorite(props.appUser.favoriteBookIds.includes(book.id))
                 } else {
                     console.error('No book found for Id: ', id);
                 }
-                })
+            })
             .catch(error => {
                 console.error('Error fetching Books: ', error);
             })
     }
 
-
-
-  function handleClickDialogOpen() {
-        setOpen(true);
+    function handleRead() {
+        if (read && book) {
+            props.removeReadBook(book.id)
+            setRead(false)
+        }
+        if (!read && book) {
+            props.addReadBook(book.id)
+            setRead(true)
+        }
     }
 
-    function handleClickDialogClose() {
-        setOpen(false);
+    function handleFavorite() {
+        if (favorite && book) {
+            props.removeFavoriteBook(book.id)
+            setFavorite(false)
+        }
+        if (!favorite && book) {
+            props.addFavoriteBook(book.id)
+            setFavorite(true)
+        }
     }
+
+    function handleDelete() {
+        if (book) {
+            props.removeBook(book.id)
+        }
+    }
+
+    if (!book) {
+        return <div>loading...</div>
+    }
+
 
     return (
         <>
             <div className={"link-wrapper"}>
                 <div className={"link-icon-wrapper"}>
-            <Link className={"back-link"} to={'/'}><ArrowBackIosIcon/> Übersicht</Link>
-                    {/*{book?.read ? <img src={"/book-filled.svg"} className={"read-icon-filled"} alt={"a filled book"}/> : <img src={"/book-outlined.svg"} className={"read-icon-outlined"} alt={"an outlined book"}/> }*/}
-                    {/*{book?.favorite ? <FavoriteIcon className={"favorite-icon"}/> : <FavoriteBorderIcon className={"favorite-icon"}/> }*/}
-              <CreateIcon className={"edit-icon"} onClick={handleClickDialogOpen} />
+                    <Link className={"back-link"} to={'/'}><ArrowBackIosIcon/> Übersicht</Link>
+                    {read ?
+                        (<IconButton onClick={handleRead} aria-label="read"><FontAwesomeIcon icon={faBookOpen} style={{color: "#000",}}/></IconButton>)
+                        :
+                        (<IconButton onClick={handleRead} aria-label="read"><FontAwesomeIcon icon={faBook} style={{color: "#000",}} /></IconButton>)}
+                    {favorite ?
+                        (<IconButton onClick={handleFavorite} aria-label="favorite"><FontAwesomeIcon icon={faHeart} style={{color: "#000",}} /></IconButton>)
+                        :
+                        (<IconButton onClick={handleFavorite} aria-label="favorite"><FontAwesomeIcon icon={faHeart} style={{color: "#000",}} /></IconButton>)}
+                    <IconButton onClick={handleDelete} aria-label="delete"><FontAwesomeIcon icon={faTrash} style={{color: "#000",}} /></IconButton>
                 </div>
-                <Dialog open={open} onClose={handleClickDialogClose}>
-                    <DialogTitle>Info aktualisieren</DialogTitle>
-                    <DialogContent>
-                        <Checkboxes
-                            checked={read}
-                            handleOnClick={() => {setRead(!read);}}
-                            label={"Gelesen"}/>
-                        <Checkboxes
-                            checked={favorite}
-                            handleOnClick={() => {setFavorite(!favorite);}}
-                            label={"Favorit"}/>
-                    </DialogContent>
-                    <DialogActions>
-                        <button onClick={handleClickDialogClose}>Abbrechen</button>
-
-                        <button onClick={() => {
-                            if(book?.id){
-                            props.updateBook({...book, read, favorite});
-                            handleClickDialogClose();
-                        }}}>Speichern</button>
-
-                        <button onClick={() => {
-                            if(book?.id) {
-                            props.removeBook(book.id)}}}>Löschen</button>
-
-                    </DialogActions>
-                </Dialog>*
             </div>
-                {book && (
+            {book && (
                 <div className={"book-details-wrapper"}>
                     {bookImage && <img src={bookImage} alt={"Buchcover"}/>}
                     <div className={"book-details"}>
-                    <h2 className={"header-md"}>{book.volumeInfo.title}</h2>
-                    <h3 className={"header-sm"}>{book.volumeInfo.authors}</h3>
-                    <p>{book.volumeInfo.publisher}</p>
-                    <p>{book.volumeInfo.categories}</p>
-                    <p className={"book-details--description"}>{book.volumeInfo.description}</p>
+                        <h2 className={"header-md"}>{book.volumeInfo.title}</h2>
+                        <h3 className={"header-sm"}>{book.volumeInfo.authors}</h3>
+                        <p>{book.volumeInfo.publisher}</p>
+                        <p>{book.volumeInfo.categories}</p>
+                        <p className={"book-details--description"}>{book.volumeInfo.description}</p>
                     </div>
                 </div>
             )}

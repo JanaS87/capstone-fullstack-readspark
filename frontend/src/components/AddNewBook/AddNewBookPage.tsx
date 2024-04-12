@@ -8,7 +8,7 @@ import {Alert, Snackbar} from "@mui/material";
 import BookDetails from "../BookDetails/BookDetails.tsx";
 
 type AddNewBookPageProps = {
-    addBook: (id: string) => void,
+    addBook: (id: string) => Promise<void>,
 }
 
 
