@@ -7,6 +7,7 @@ import LoginPage from "./components/LoginPage/LoginPage.tsx";
 import FavoriteBooksPage from "./components/FavoritesPage/FavoriteBooksPage.tsx";
 import AddNewBookPage from "./components/AddNewBook/AddNewBookPage.tsx";
 import ProtectedRoutes from "./components/ProtectedRoutes/ProtectedRoutes.tsx";
+import ReadBookPage from "./components/ReadBookPage/ReadBookPage.tsx";
 
 export default function App() {
     const {
@@ -67,7 +68,18 @@ export default function App() {
                             />
                         }
                     />
+                    <Route
+                        path={"/read"}
+                        element={
+                            <ReadBookPage
+                                // @ts-expect-error appUser can´t be null or undefined here, it is checked in ProtectedRoutes
+                                appUser={appUser}
+                                books={books}
+                            />
+                        }
+                    />
                 </Route>
+
             </Routes>
             <Navbar/>
         </>
