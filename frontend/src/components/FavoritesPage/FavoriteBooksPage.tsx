@@ -1,6 +1,7 @@
 import {AppUser} from "../../types/AppUser.ts";
 import BookCard from "../BookCard/BookCard.tsx";
 import {GoogleBook} from "../../types/GoogleBook.ts";
+import "./FavoriteBooksPage.css";
 
 type FavoriteBooksPageProps = {
     appUser: AppUser,
@@ -16,13 +17,17 @@ export default function FavoriteBooksPage(props: Readonly<FavoriteBooksPageProps
 
     return (
         <>
+            <div className={"favorite-book-wrapper"}>
+            <div className={"header-wrapper"}>
             <h1 className={"header-title"}>Favoriten</h1>
+                </div>
             <div className={"book-card"}>
                 {favoriteBooks.map(book =>
                     <BookCard key={book.id}
                               book={book}
                               appUser={props.appUser}
                     />)}
+            </div>
             </div>
 
         </>
