@@ -1,0 +1,6 @@
+.login-btn-wrapper {
+    display: flex;
+    justify-content: center;
+  margin-top: 20px;
+  width: 60%;
+}

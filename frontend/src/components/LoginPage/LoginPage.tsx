@@ -1,3 +1,6 @@
+import { GithubLoginButton} from "react-social-login-buttons";
+import "./LoginPage.css";
+
 type LoginPageProps = {
     login: () => void;
 
@@ -5,6 +8,8 @@ type LoginPageProps = {
 
 export default function LoginPage(props: Readonly<LoginPageProps>) {
     return (
-        <button onClick={props.login}>Login with GitHub</button>
+        <div className={"login-btn-wrapper"}>
+        <GithubLoginButton  onClick={props.login}></GithubLoginButton>
+        </div>
     )
 }
