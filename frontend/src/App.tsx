@@ -26,10 +26,9 @@ export default function App() {
     return (
         <>
 
-            <HeaderNavbar
-                // @ts-expect-error appUser can´t be null or undefined here, it is checked in ProtectedRoutes
+            {appUser && <HeaderNavbar
                 appUser={appUser}
-                logout={logout}/>
+                logout={logout}/>}
             <Routes>
                 <Route path={"/login"} element={<LoginPage login={login}/>}/>
                 <Route element={<ProtectedRoutes user={appUser}/>}>
