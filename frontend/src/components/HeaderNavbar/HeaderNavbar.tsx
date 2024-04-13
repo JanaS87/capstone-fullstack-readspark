@@ -32,21 +32,21 @@ export default function HeaderNavbar(props: Readonly<HeaderNavbarProps>) {
     function handleRoute (currentPath:string): string {
 
         switch (currentPath) {
-    case 'Übersicht':
-        return '/';
+            case 'Übersicht':
+                return '/';
 
-    case 'Neues Buch':
-        return '/add';
+            case 'Neues Buch':
+                return '/add';
 
-    case 'Favoriten':
-       return '/favorites';
+            case 'Favoriten':
+                return '/favorites';
 
-    case 'Gelesen':
-        return '/read';
+            case 'Gelesen':
+                return '/read';
 
-    default:
-        return '/';
-    }
+            default:
+                return '/';
+        }
     }
 
 
@@ -164,7 +164,7 @@ export default function HeaderNavbar(props: Readonly<HeaderNavbarProps>) {
                             onClose={handleCloseUserMenu}
                         >
                             {settings.map((setting) => (
-                                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                                <MenuItem key={setting} onClick={setting === 'Logout' ? props.logout : handleCloseUserMenu}>
                                     <Typography textAlign="center">{setting}</Typography>
                                 </MenuItem>
                             ))}
