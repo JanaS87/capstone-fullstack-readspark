@@ -68,7 +68,7 @@ export default function HeaderNavbar(props: Readonly<HeaderNavbarProps>) {
 
     return (
 
-        <AppBar position="sticky" sx={{ backgroundColor: '#322f2f' }}>
+        <AppBar position="fixed" sx={{ backgroundColor: '#322f2f' }}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters sx={{minHeight: '50px'}}>
                     <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />

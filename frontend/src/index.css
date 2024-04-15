@@ -2,7 +2,7 @@ body, :root {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-    font-family: 'Roboto', sans-serif;
+  font-family: 'Roboto', sans-serif;
 }
 
 body {
@@ -13,7 +13,7 @@ body {
     background-position: center;
 }
 
-html {
-  height: 100%;
-  overflow: auto;
+header {
+  margin-bottom: 50px;
 }
+

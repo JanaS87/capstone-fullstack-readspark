@@ -1,0 +1,16 @@
+.selected-book-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  overflow-y: auto;
+  max-height: calc(100vh - 130px);
+}
+
+.book-img {
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
+}

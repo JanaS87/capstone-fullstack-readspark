@@ -1,4 +1,5 @@
 import {GoogleBook} from "../../types/GoogleBook.ts";
+import "./BookDetails.css";
 
 
 type BookDetailsProps = {

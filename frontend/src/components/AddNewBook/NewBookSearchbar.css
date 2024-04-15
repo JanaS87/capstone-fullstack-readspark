@@ -1,18 +1,3 @@
-.selected-book-wrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin-top: 10px;
-  margin-bottom: 20px;
-  overflow-y: auto;
-  max-height: calc(100vh - 130px);
-}
-
-.book-img {
-  margin-top: 10%;
-}
-
 .information-wrapper {
   text-align: center;
   margin-top: 5px;
@@ -53,10 +38,14 @@ span {
   margin-top: 0;
 }
 
+.btn-primary-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .btn-primary {
   margin-bottom: 30px;
   margin-top: auto;
-  position: sticky;
   background-color: #423F3E;
-
 }

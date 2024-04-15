@@ -130,10 +130,12 @@ export default function NewBookSearchbar(props: Readonly<NewBookSearchbarProps>)
                 <><BookDetails
                     selectedBook={selectedBook}
                 />
+                    <div className={"btn-primary-wrapper"}>
                     <Button
                     className={"btn-primary"} aria-label={"add"} variant={"contained"}
                     style={{backgroundColor: "#423F3E", color: "white"}}
                     onClick={handleAddNewBook}>Buch hinzufügen</Button>
+                    </div>
                 </>
             )}
 
