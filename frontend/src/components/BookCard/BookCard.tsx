@@ -18,7 +18,7 @@ export default function BookCard(props: Readonly<BookCardProps>) {
     return (
         <Link to={"/books/" + props.book.id} className={"BookCard"}>
             <div className={"book-card-container"}>
-                <img className={"small-thumbnail"} src={props.book.volumeInfo.imageLinks.smallThumbnail}
+                <img className={"small-thumbnail"} src={props.book.volumeInfo.imageLinks?.smallThumbnail}
                      alt={props.book.volumeInfo.title}/>
                 <div className={"book-card-info-container"}>
                     <h2 className={"BookTitle"}>{props.book.volumeInfo.title}</h2>
