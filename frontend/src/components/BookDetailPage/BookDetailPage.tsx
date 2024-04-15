@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {Link, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import "./BookDetailPage.css";
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import {GoogleBook} from "../../types/GoogleBook.ts";
@@ -24,6 +24,7 @@ export default function BookDetailPage(props: Readonly<BookDetailPageProps>) {
     const [read, setRead] = useState(book ? props.appUser.readBookIds.includes(book.id) : false);
     const [favorite, setFavorite] = useState(book ? props.appUser.favoriteBookIds.includes(book.id) : false);
     const {id} = useParams<{ id: string }>();
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (id) {
@@ -74,7 +75,11 @@ export default function BookDetailPage(props: Readonly<BookDetailPageProps>) {
 
     function handleDelete() {
         if (book) {
+            const confirmDelete = window.confirm("Buch wirklich löschen?");
+            if (confirmDelete) {
             props.removeBook(book.id)
+            navigate('/')
+            }
         }
     }
 

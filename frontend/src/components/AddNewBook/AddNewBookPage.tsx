@@ -6,6 +6,7 @@ import axios from "axios";
 import {GoogleBook} from "../../types/GoogleBook.ts";
 import {Alert, Snackbar} from "@mui/material";
 import BookDetails from "../BookDetails/BookDetails.tsx";
+import {useNavigate} from "react-router-dom";
 
 type AddNewBookPageProps = {
     addBook: (id: string) => Promise<void>,
@@ -17,6 +18,7 @@ export default function AddNewBookPage(props: Readonly<AddNewBookPageProps>) {
     const [selectedBook, setSelectedBook] = useState<GoogleBook | null>(null)
     const [alert, setAlert] = useState<string>("");
     const [openSnackbar, setOpenSnackbar] = useState(false);
+    const navigate = useNavigate();
 
     const onNewScanResult =  (decodedText: string, decodedResult: Html5QrcodeResult) => {
         console.log(`Scan result:`, decodedText)
@@ -50,7 +52,11 @@ export default function AddNewBookPage(props: Readonly<AddNewBookPageProps>) {
                 .then(r => {
                     setSelectedBook(null);
                     setOpenSnackbar(true);
+                    setTimeout(() =>
+                        navigate('/'),
+                        3000);
                     return r;
+
                 })
                 .catch(() => setAlert('Buch gibt es bereits!')
                 )

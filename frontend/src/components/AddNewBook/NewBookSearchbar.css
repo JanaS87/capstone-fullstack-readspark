@@ -1,62 +1,11 @@
-.selected-book-wrapper {
+.btn-primary-wrapper {
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 10px;
-  margin-bottom: 20px;
-  overflow-y: auto;
-  max-height: calc(100vh - 130px);
-}
-
-.book-img {
-  margin-top: 10%;
-}
-
-.information-wrapper {
-  text-align: center;
-  margin-top: 5px;
-}
-
-.information-title {
-  font-size: 1rem;
-  font-weight: bold;
-}
-
-.information-author {
-  font-size: 1rem;
-}
-
-.information-publisher {
-  font-size: 1rem;
-}
-
-information-category {
-  font-size: 1rem;
-}
-
-.description-text {
-  text-align: center;
-  font-size: 0.88rem;
-  margin: 20px 14px 10px;
-}
-
-span {
-  font-weight: bold;
-}
-
-.checkbox-wrapper {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  margin-top: 0;
 }
 
 .btn-primary {
   margin-bottom: 30px;
   margin-top: auto;
-  position: sticky;
   background-color: #423F3E;
-
 }

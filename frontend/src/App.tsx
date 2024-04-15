@@ -24,11 +24,11 @@ export default function App() {
     } = useAppUser();
 
     return (
-        <>
-
+        <>  <header>
             {appUser && <HeaderNavbar
                 appUser={appUser}
                 logout={logout}/>}
+            </header>
             <Routes>
                 <Route path={"/login"} element={<LoginPage login={login}/>}/>
                 <Route element={<ProtectedRoutes user={appUser}/>}>

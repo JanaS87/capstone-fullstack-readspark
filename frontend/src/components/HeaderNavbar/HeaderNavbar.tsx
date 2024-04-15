@@ -68,7 +68,7 @@ export default function HeaderNavbar(props: Readonly<HeaderNavbarProps>) {
 
     return (
 
-        <AppBar position="sticky" sx={{ backgroundColor: '#322f2f' }}>
+        <AppBar position="fixed" sx={{ backgroundColor: '#322f2f' }}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters sx={{minHeight: '50px'}}>
                     <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
@@ -109,7 +109,6 @@ export default function HeaderNavbar(props: Readonly<HeaderNavbarProps>) {
                             ))}
                         </Menu>
                     </Box>
-                    <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
                     <Typography
                         variant="h5"
                         noWrap
@@ -119,15 +118,15 @@ export default function HeaderNavbar(props: Readonly<HeaderNavbarProps>) {
                             mr: 2,
                             display: { xs: 'flex', md: 'none' },
                             flexGrow: 1,
-                            fontFamily: 'monospace',
+                            fontFamily: 'Helvetica, sans-serif',
                             fontWeight: 700,
-                            letterSpacing: '.3rem',
+                            letterSpacing: '.2rem',
                             color: 'inherit',
                             textDecoration: 'none',
                             cursor: 'default',
                         }}
                     >
-                        LOGO
+                        ReadSpark
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         {pages.map((page) => (
