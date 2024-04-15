@@ -8,8 +8,11 @@ type LoginPageProps = {
 
 export default function LoginPage(props: Readonly<LoginPageProps>) {
     return (
-        <div className={"login-btn-wrapper"}>
-        <GithubLoginButton  onClick={props.login}></GithubLoginButton>
+        <div className={"login-wrapper"}>
+            <img src={"/rslogo.png"} alt={"logo"} className={"logo"}></img>
+            <div className={"login-btn-wrapper"}>
+        <GithubLoginButton onClick={props.login}></GithubLoginButton>
+            </div>
         </div>
     )
 }

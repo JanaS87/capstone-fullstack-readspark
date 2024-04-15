@@ -1,6 +1,26 @@
-.login-btn-wrapper {
+@keyframes fadeIn  {
+   0% { opacity: 0; visibility: hidden; }
+    1% {visibility: visible;}
+    100% { opacity: 1; visibility: visible; }
+}
+
+.login-wrapper {
     display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
-  margin-top: 20px;
-  width: 60%;
+    height: 100vh;
+}
+
+.logo {
+   width: 90%;
+    margin-bottom: 20px;
+    animation: fadeIn 2s ease-in-out;
+
+}
+
+.login-btn-wrapper {
+    width: 55%;
+    visibility: hidden;
+    animation: fadeIn 2s ease-in-out 2s forwards;
 }
