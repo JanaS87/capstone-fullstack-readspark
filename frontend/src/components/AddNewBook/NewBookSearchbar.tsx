@@ -4,6 +4,7 @@ import {Alert, Autocomplete, Button, CircularProgress, Snackbar, TextField} from
 import {GoogleBook} from "../../types/GoogleBook";
 import "./NewBookSearchbar.css";
 import BookDetails from "../BookDetails/BookDetails.tsx";
+import {useNavigate} from "react-router-dom";
 
 type NewBookSearchbarProps = {
     addBook: (id: string) => void;
@@ -31,6 +32,7 @@ export default function NewBookSearchbar(props: Readonly<NewBookSearchbarProps>)
     const [timer, setTimer] = useState<number>();
     const [alert, setAlert] = useState<string>("");
     const loading = open && options.length === 0;
+    const navigate = useNavigate()
 
 
 
@@ -65,6 +67,9 @@ export default function NewBookSearchbar(props: Readonly<NewBookSearchbarProps>)
             props.addBook(selectedBook.id);
             setSelectedBook(null);
             setOpenSnackbar(true);
+            setTimeout(() => {
+                navigate('/');
+            }, 3000);
         }
     }
 
