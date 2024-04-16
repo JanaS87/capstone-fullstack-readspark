@@ -84,6 +84,11 @@ export default function AddNewBookPage(props: Readonly<AddNewBookPageProps>) {
             setAddMethod(method);
         }
 
+        function handleResetMethod() {
+            setAddMethod(null);
+            setSelectedBook(null);
+        }
+
 
         return (
             <>
@@ -129,21 +134,27 @@ export default function AddNewBookPage(props: Readonly<AddNewBookPageProps>) {
                         disableFlip={false}
                     />
                 )}
-                {addMethod !== null && (
-                    <Button className={"reset-btn"}
-                            aria-label={"back to methods"} variant={"contained"}
-                            style={{backgroundColor: "#423F3E", color: "white"}}
-                            onClick={() => setAddMethod(null)}>Zur Auswahl zurück</Button>
-                )}
+
                 {selectedBook && (
                     <>
                         <BookDetails selectedBook={selectedBook}/>
                         <div className={"btn-wrapper"}>
-                            <button className={"btn-primary"} onClick={addNewBook} aria-label={"add"}>Buch hinzufügen</button>
-                            <button className={"btn-secondary"} aria-label={"cancel"} onClick={handleCancel}>Abbrechen
-                            </button>
+                            <Button aria-label={"add book"} style={{backgroundColor: "#423F3E", color: "white"}} onClick={addNewBook}>Buch hinzufügen</Button>
+                            <Button style={{backgroundColor: "#423F3E", color: "white"}} className={"btn-secondary"} aria-label={"cancel"} onClick={handleCancel}>Abbrechen
+                            </Button>
                         </div>
                     </>
+                )}
+                {addMethod !== null && (
+                    <div className={"reset-btn-wrapper"}>
+                    <Button
+                            aria-label={"back to methods"} variant={"contained"}
+                            style={{backgroundColor: "#423F3E", color: "white"}}
+                            onClick={handleResetMethod}
+                    >
+                        Zur Auswahl zurück
+                    </Button>
+                    </div>
                 )}
                 <Snackbar open={openSnackbar}
                           autoHideDuration={3000}

@@ -1,5 +1,7 @@
 import {GoogleBook} from "../../types/GoogleBook.ts";
 import "./BookDetails.css";
+import {useState} from "react";
+import {Button} from "@mui/material";
 
 
 type BookDetailsProps = {
@@ -7,6 +9,12 @@ type BookDetailsProps = {
 };
 
 export default function BookDetails({selectedBook}: Readonly<BookDetailsProps>) {
+    const [isExpanded, setIsExpanded] = useState<boolean>(false);
+
+    function handleToggleExpand() {
+        setIsExpanded(!isExpanded);
+    }
+
     return (
         <div className={"selected-book-wrapper"}>
             <img className={"book-img"} src={selectedBook.volumeInfo.imageLinks?.thumbnail}
@@ -17,7 +25,20 @@ export default function BookDetails({selectedBook}: Readonly<BookDetailsProps>) 
                 <p className={"information-publisher"}><span>Verlag:</span> {selectedBook.volumeInfo.publisher}</p>
                 <p className={"information-category"}><span>Genre:</span> {selectedBook.volumeInfo.categories?.join(", ")}</p>
                 <p className={"description-text"}>
-                    <span>Beschreibung:</span> {selectedBook.volumeInfo.description}
+                    <span>Beschreibung:</span>
+                    {isExpanded ? selectedBook.volumeInfo.description
+                        :
+                        (selectedBook.volumeInfo.description?.substring(0, 200) + '...')}
+                    <Button aria-label={"expand text"}
+                            variant={"contained"}
+                            onClick={handleToggleExpand}
+                            className={"expand-button"}
+                            style={{backgroundColor: "#423F3E", color: "white"}}
+                            size={"small"}
+
+                    >
+                        {isExpanded ? 'Weniger anzeigen' : 'Mehr anzeigen'}
+                    </Button>
                 </p>
             </div>
         </div>
