@@ -4,9 +4,10 @@ import {Html5QrcodeResult} from "html5-qrcode";
 import React, {useState} from "react";
 import axios from "axios";
 import {GoogleBook} from "../../types/GoogleBook.ts";
-import {Alert, Snackbar} from "@mui/material";
+import {Alert, Button, Snackbar} from "@mui/material";
 import BookDetails from "../BookDetails/BookDetails.tsx";
 import {useNavigate} from "react-router-dom";
+import "./AddNewBookPage.css";
 
 type AddNewBookPageProps = {
     addBook: (id: string) => Promise<void>,
@@ -19,6 +20,7 @@ export default function AddNewBookPage(props: Readonly<AddNewBookPageProps>) {
     const [alert, setAlert] = useState<string>("");
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const navigate = useNavigate();
+    const [addMethod, setAddMethod] = useState<'search' | 'scan' | null>(null)
 
     const onNewScanResult =  (decodedText: string, decodedResult: Html5QrcodeResult) => {
         console.log(`Scan result:`, decodedText)
@@ -78,19 +80,46 @@ export default function AddNewBookPage(props: Readonly<AddNewBookPageProps>) {
             setSelectedBook(null);
         }
 
+        function handleSelectMethod(method: 'search' | 'scan') {
+            setAddMethod(method);
+        }
+
 
         return (
             <>
-                <div className={"header-title--wrapper"}>
-                    <h1 className={"header-title"}>Neues Buch hinzufügen</h1>
-                </div>
-                <NewBookSearchbar addBook={props.addBook}/>
-                <div>
-                    <h2>Buch über ISBN suchen</h2>
-                    <button onClick={handleScannerToggle}>
-                        {isScannerActive ? "Barcode Scanner stoppen" : "Barcode Scanner starten"}
-                    </button>
-                </div>
+            <div className={"header-title--wrapper"}>
+                <h1 className={"header-title"}>Neues Buch</h1>
+
+            </div>
+            {addMethod === null && (
+                <>
+                    <p className={"add-method-paragraph"}>Wie möchtest du ein Buch hinzufügen?</p>
+                    <div className={"add-method--wrapper"}>
+
+                        <Button className={"btn-primary"} aria-label={"select method"} variant={"contained"}
+                                style={{backgroundColor: "#423F3E", color: "white"}}
+                                onClick={() => handleSelectMethod('search')}>Buch suchen</Button>
+                        <Button className={"btn-primary"} aria-label={"select method"} variant={"contained"}
+                                style={{backgroundColor: "#423F3E", color: "white"}}
+                                onClick={() => handleSelectMethod('scan')}>Buch scannen</Button>
+                    </div>
+                </>
+        )
+}
+{
+            addMethod === 'search' && <NewBookSearchbar addBook={props.addBook}/>}
+                {addMethod === 'scan' && (
+                    <div className={"isbn-method-wrapper"}>
+                        <h2>Buch über ISBN suchen</h2>
+                        <Button className={"open-scanner-btn"}
+                            aria-label={"open scanner"} variant={"contained"}
+                                style={{backgroundColor: "#423F3E", color: "white"}}
+                                onClick={handleScannerToggle}>
+                            {isScannerActive ? "Barcode Scanner stoppen" : "Barcode Scanner starten"}
+                        </Button>
+                    </div>
+                )}
+
                 {isScannerActive && (
                     <BarcodeScanner
                         qrCodeSuccessCallback={onNewScanResult}
@@ -99,6 +128,12 @@ export default function AddNewBookPage(props: Readonly<AddNewBookPageProps>) {
                         qrbox={250}
                         disableFlip={false}
                     />
+                )}
+                {addMethod !== null && (
+                    <Button className={"reset-btn"}
+                            aria-label={"back to methods"} variant={"contained"}
+                            style={{backgroundColor: "#423F3E", color: "white"}}
+                            onClick={() => setAddMethod(null)}>Zur Auswahl zurück</Button>
                 )}
                 {selectedBook && (
                     <>
