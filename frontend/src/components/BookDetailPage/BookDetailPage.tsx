@@ -77,8 +77,8 @@ export default function BookDetailPage(props: Readonly<BookDetailPageProps>) {
         if (book) {
             const confirmDelete = window.confirm("Buch wirklich löschen?");
             if (confirmDelete) {
-            props.removeBook(book.id)
-            navigate('/')
+                props.removeBook(book.id)
+                navigate('/')
             }
         }
     }
@@ -90,23 +90,23 @@ export default function BookDetailPage(props: Readonly<BookDetailPageProps>) {
 
     return (
         <>
-            <div className={"link-wrapper"}>
-                <div className={"link-icon-wrapper"}>
-                    <Link className={"back-link"} to={'/'}><ArrowBackIosIcon/> Übersicht</Link>
-                    {read ?
+                <div className={"link-wrapper"}>
+                    <div className={"link-icon-wrapper"}>
+                        <Link className={"back-link"} to={'/'}><ArrowBackIosIcon/> Übersicht</Link>
+                        {read ?
                         (<IconButton onClick={handleRead} aria-label="read"><FontAwesomeIcon icon={faBookOpen} style={{color: "#000",}}/></IconButton>)
-                        :
+                            :
                         (<IconButton onClick={handleRead} aria-label="read"><FontAwesomeIcon icon={faBook} style={{color: "#000",}} /></IconButton>)}
-                    {favorite ?
+                        {favorite ?
                         (<IconButton onClick={handleFavorite} aria-label="favorite"><FontAwesomeIcon icon={faHeart} style={{color: "#000",}} /></IconButton>)
-                        :
+                            :
                         (<IconButton onClick={handleFavorite} aria-label="favorite"><FontAwesomeIcon icon={faHeart} /></IconButton>)}
                     <IconButton onClick={handleDelete} aria-label="delete"><FontAwesomeIcon icon={faTrash} style={{color: "#000",}} /></IconButton>
+                    </div>
                 </div>
-            </div>
-            {book && (
-                <BookDetails selectedBook={book}/>
-            )}
+                {book && (
+                    <BookDetails selectedBook={book}/>
+                )}
         </>
     )
 }
