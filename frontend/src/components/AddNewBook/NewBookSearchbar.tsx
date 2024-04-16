@@ -107,7 +107,8 @@ export default function NewBookSearchbar(props: Readonly<NewBookSearchbarProps>)
                 renderInput={(params) => (
                     <TextField
                         {...params}
-                        label="Search for a book"
+
+                        label="Buchtitel eingeben"
                         value={searchTerm}
                         onChange={(e: ChangeEvent<HTMLInputElement>) => {
                             setSearchTerm(e.target.value)
