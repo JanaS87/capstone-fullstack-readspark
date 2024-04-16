@@ -34,11 +34,12 @@
 
 .information-category {
   font-size: 1.2rem;
+  margin-left: 10px;
 }
 
 .description-text {
   text-align: center;
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   margin: 20px 14px 10px;
 }
 
