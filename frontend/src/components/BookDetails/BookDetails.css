@@ -1,10 +1,21 @@
+.blurry-background {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(3px);
+  box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  height: auto;
+  overflow-y: auto;
+  width: 95%;
+  margin-left: 10px;
+}
+
 .selected-book-wrapper {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   margin-top: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   overflow-y: auto;
 }
 
